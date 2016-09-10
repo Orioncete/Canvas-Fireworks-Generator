@@ -1,0 +1,154 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+#lienzo1 {
+    width: 95%;
+    margin: 5px 2.5%;
+    background-color: transparent;
+    border-radius: 25px;
+}
+#botonera {
+    width: 95%;
+    margin: 0 auto;
+}
+button {
+    margin: 0 .1%;
+    padding: 0;
+    width: 16.45%;
+    font-size: 1.5em;
+    border-radius: .5em;
+    border: solid 2px black;
+    color: white;
+    background-color: black;
+    box-shadow: none!important;
+    box-decoration-break: 
+}
+button:hover {
+    font-weight: bold;
+    color: black;
+    background-color: white;
+}
+.dialog {
+    width: 30%;
+    padding: 1em 0;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border: double 5px white;
+    border-radius: .5em;
+    position: absolute;
+    top: 45%;
+    left: 35%;
+    display: none;
+}
+#dialogConfirm h3:first-child {
+	text-transform: uppercase;
+    text-decoration: underline;
+}
+#dialogConfirm h3:nth-child(2) {
+	margin-top: -2em;
+}
+#dialogConfirm h4 {
+	font-size: 1.2em;
+}
+#dialogOptions {
+	font-size: 1.5em;
+}
+#closeIcon {
+    position: absolute;
+    left: 92%;
+    top: .5em;
+}
+#colorin, #fotico {
+	border: solid 1px white;
+}
+#fotico {
+	border: solid 1px white;
+    padding-right: 1em;
+}
+
+#listaFiltros {
+    text-align: left;
+    margin-left: 15%;
+}
+   /*Eliminamos los iconos del input radio*/
+
+#listaFiltros input[type=radio] {
+	opacity: 0;
+}
+   /*Añadimos icono unchecked antes del label HERMANO de todos los input radio*/
+
+#listaFiltros input[type=radio] + label:before {
+    content: url("../imagenes/iconos/unchecked.png");
+}
+   /*Añadimos icono checked antes del label HERMANO del input radio seleccionado*/
+
+#listaFiltros input[type=radio]:checked + label:before {
+    content: url("../imagenes/iconos/checked.png");
+}
+#listaFiltros span {
+    float: right;
+    margin-right: 20%;
+}
+#listaFiltros hr {
+	margin-right: 18%;
+}
+#closingIcon {
+    position: absolute;
+    left: 92%;
+    top: .5em;
+}
+#closeSaver {
+    position: absolute;
+    left: 92%;
+    top: .5em;
+}
+.blastChooserHidden {   /*Clase para ocultar la ventana lateral (slide-out)*/
+    -webkit-transition: margin 1s ease-out;
+    -moz-transition: margin 1s ease-out;
+    -ms-transition: margin 1s ease-out;
+    -o-transition: margin 1s ease-out;
+    transition: margin 1s ease-out;
+    margin-left: -13%;
+}
+.blastChooserShown {   /*Clase para mostrar la ventana lateral (slide-in)*/
+    -webkit-transition: margin 1.2s ease-in;
+    -moz-transition: margin 1.2s ease-in;
+    -ms-transition: margin 1.2s ease-in;
+    -o-transition: margin 1.2s ease-in;
+    transition: margin 1.2s ease-in;
+    margin-left: 0;
+}
+#blastChooser {
+    width: 12%;
+    position: absolute;
+    top: 2%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-top: double 5px white;
+    border-right: double 5px white;
+    border-bottom: double 5px white;
+    border-top-right-radius: 1.5em;
+    border-bottom-right-radius: 1.5em;
+    text-align: right;
+    color: white;
+}
+.thumbs {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: .5em;
+    margin-right: 2.6em;
+}
+.thumbs:hover {
+	background-color: white;
+}
+#blastChooser h3 {
+	font-size: 2em;
+    margin-right: .4em;
+    text-shadow: 0 0 7px black;
+}
+#blastChooser button {
+	width: 60%;
+    margin: 0 .6em .5em 0;
+    border: solid 2px white;
+}
