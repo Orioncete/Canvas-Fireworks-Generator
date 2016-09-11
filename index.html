@@ -24,5 +24,21 @@
 
     <title>Fireworks-generator</title>
 </head>
-<body onload="contentSetter();"></body>
+<body onload="contentSetter();">
+
+<!--    Scripts para el uso de Firebase-->
+
+<script src="https://www.gstatic.com/firebasejs/3.3.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDSEFJi8EoFGox_LbDPCDXL5v1LKSvS0Uw",
+    authDomain: "fireworks-generator.firebaseapp.com",
+    databaseURL: "https://fireworks-generator.firebaseio.com",
+    storageBucket: "fireworks-generator.appspot.com",
+  };
+  firebase.initializeApp(config);
+</script>
+
+</body>
 </html>

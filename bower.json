@@ -1,0 +1,21 @@
+{
+  "name": "canvas_firework_generator",
+  "authors": [
+    "Pedro Pablo Gonzalo <uliaoth@hotmail.com>"
+  ],
+  "description": "an easy tool to add firework effects to your pictures",
+  "main": "[index.html, css/estilo.css, js/guion.js]",
+  "license": "MIT",
+  "homepage": "",
+  "private": false,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "firebase": "^3.3.2"
+  }
+}

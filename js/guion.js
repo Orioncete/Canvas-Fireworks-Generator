@@ -381,7 +381,7 @@ function filterSetter() {
         contexto.fillRect(0, 0, lienzo.width, lienzo.height);
         contexto.globalCompositeOperation = "source-over";
         var ventana = document.getElementById("dialogConfirm");
-        var mainWindCont = '<h4>¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?</h4><p>(Los cambios no deshacerse más adelante)</p><br><button type="button" id="confirm" class="choiceBtn">Si</button><button type="button" id="deny" class="choiceBtn">No</button>';
+        var mainWindCont = '<h4>¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?</h4><p>(Los cambios no podrán deshacerse más adelante)</p><br><button type="button" id="confirm" class="choiceBtn">Si</button><button type="button" id="deny" class="choiceBtn">No</button>';
         ventana.innerHTML = mainWindCont;
         ventana.style.top = "40%";
         ventana.style.display = "block";
