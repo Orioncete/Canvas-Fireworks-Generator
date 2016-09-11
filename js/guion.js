@@ -1,4 +1,4 @@
-// PRIMERO, UN POCO DE DEFINICIÓN DE LOS OBJETOS QUE USAREMOS EN LA APP
+// PRIMERO, DEFINIMOS LOS OBJETOS QUE USAREMOS EN LA APP
 
 // Creamos una serie de objetos Json para definir los diferentes tipos de
 // cohetes, cada uno contiene los cuatro colores de la estela y la imagen de la palmera.
@@ -306,6 +306,7 @@ function backgroundSelector() {
     var confirmacion = document.getElementById("dialogConfirm");
     var mainWindCont = '<label for="colorin">Color de fondo: </label><input id="colorin" name="colorin" type="color"><br><br><label for="fotico">Imagen de fondo: </label><input id="fotico" name="fotico" type="file" accept="image/*"><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
     ventana.innerHTML = mainWindCont;
+    ventana.style.top = "40%"
     ventana.style.display = "block";
     document.getElementById("closeIcon").addEventListener("click", function() {
         ventana.style.display = "none";
@@ -380,7 +381,7 @@ function filterSetter() {
         contexto.fillRect(0, 0, lienzo.width, lienzo.height);
         contexto.globalCompositeOperation = "source-over";
         var ventana = document.getElementById("dialogConfirm");
-        var mainWindCont = '<h4>¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?</h4><p>(Los cambios no podrán ser revertidos más adelante)</p><br><button type="button" id="confirm" class="choiceBtn">Si</button><button type="button" id="deny" class="choiceBtn">No</button>';
+        var mainWindCont = '<h4>¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?</h4><p>(Los cambios no deshacerse más adelante)</p><br><button type="button" id="confirm" class="choiceBtn">Si</button><button type="button" id="deny" class="choiceBtn">No</button>';
         ventana.innerHTML = mainWindCont;
         ventana.style.top = "40%";
         ventana.style.display = "block";
@@ -477,7 +478,7 @@ function blastSetter() {
     var ventana = document.getElementById("blastChooser");
     var mainWindCont = '<h3>Palmeras:</h3>';
     for (i = 0; i < fwSets.length; i++) {
-        mainWindCont += '<img src="' + fwSets[i].blast + '" class="thumbs" id="imgLink' + i + '" width="' + lienzo.width * .045 + '" height="' + lienzo.width * .045 + '" onclick="config.set=fwSets[' + i + ']"><br>';
+        mainWindCont += '<img src="' + fwSets[i].blast + '" class="thumbs" id="imgLink' + i + '" width="' + lienzo.height * .085 + '" height="' + lienzo.height * .085 + '" onclick="config.set=fwSets[' + i + ']"><br>';
     };
     mainWindCont += '<br><button type="button" id="randomize">Aleatorio</button>'
     ventana.innerHTML = mainWindCont;
@@ -527,21 +528,40 @@ function blastRenderer(evento) {
     }
 }
 
-// Función generadora de contenidos. Genera dinámicamente todo el contenido del documento tras
-// la carga del body; canvas, botones y ventanas auxiliares. También reinicia el canvas a su
+// Función generadora de contenidos.
+// Genera dinámicamente todo el contenido del documento; tras comprobar que cumple los requerimientos
+// realiza la carga del body; canvas, botones y ventanas auxiliares. También reinicia el canvas a su
 // estado de inicio (color y fondo) y añade los manejadores de evento necesarios.
 
 function contentSetter() {
-    document.body.innerHTML = '<canvas id="lienzo1" width="' + window.innerWidth * .9375 + '" height="' + window.innerHeight * .94 + '" onclick="blastRenderer(event)"></canvas><section id="botonera"><button type="button" id="blasts">Palmeras</button><button type="button" id="viewpoint">Vista: cenital</button><button type="button" id="filtro">Aplicar filtro</button><button type="button" id="background">Fondo</button><button type="button" id="clear">Limpiar lienzo</button><button type="button" id="save">Descargar imagen</button></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside>'
-    backgrColSetter();
-    backgrImgSetter();
+    if (window.innerWidth < window.innerHeight) {
+        var displayAlarm = '<aside id="displayAlarm"><h2>Esta aplicación está diseñada para funcionar exclusivamente en posición horizontal. Por favor, gire su dispositivo 90º y reiníciela.</h2><button type="button" id="resetter">Entendido</button></aside>';
+        document.body.innerHTML = displayAlarm;
+        document.getElementById("resetter").addEventListener("click", function() {
+            window.history.back();
+        });
+    }
+    else {
+        if (window.innerWidth < 800) {
+            var displayAlarm = '<aside id="displayAlarm"><h2>Esta aplicación está diseñada para funcionar exclusivamente en dispositivos con una resolución mínima de 800px de ancho. Por favor, recárgela en otro dispositivo con las características mínimas requeridas.</h2><button type="button" id="resetter">Entendido</button></aside>';
+            document.body.innerHTML = displayAlarm;
+            document.getElementById("resetter").addEventListener("click", function() {
+            window.history.back();
+            });
+        }
+        else {
+            document.body.innerHTML = '<canvas id="lienzo1" width="' + window.innerWidth * .9375 + '" height="' + window.innerHeight * .94 + '" onclick="blastRenderer(event)"></canvas><section id="botonera"><button type="button" id="blasts">Palmeras</button><button type="button" id="viewpoint">Vista: cenital</button><button type="button" id="filtro">Aplicar filtro</button><button type="button" id="background">Fondo</button><button type="button" id="clear">Limpiar lienzo</button><button type="button" id="save">Guardar imagen</button></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside>'
+            backgrColSetter();
+            backgrImgSetter();
 
-// Manejadores de evento de los botones
+        // Manejadores de evento de los botones
 
-    document.getElementById("clear").addEventListener("click", function(){canvasReset();});
-    document.getElementById("save").addEventListener("click", function(){saveCanvas();});
-    document.getElementById("background").addEventListener("click", function(){backgroundSelector();});
-    document.getElementById("filtro").addEventListener("click", function(){filterChoose();});
-    document.getElementById("viewpoint").addEventListener("click", function() {viewSelect();});
-    document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
+            document.getElementById("clear").addEventListener("click", function(){canvasReset();});
+            document.getElementById("save").addEventListener("click", function(){saveCanvas();});
+            document.getElementById("background").addEventListener("click", function(){backgroundSelector();});
+            document.getElementById("filtro").addEventListener("click", function(){filterChoose();});
+            document.getElementById("viewpoint").addEventListener("click", function() {viewSelect();});
+            document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
+        }
+    }
 }
