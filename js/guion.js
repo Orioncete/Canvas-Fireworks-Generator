@@ -95,6 +95,84 @@ var filter = {
     effect: ""
 };
 
+// PAQUETES DE IDIOMA----------------------------------------------------
+
+// Español
+
+var spnsh = {
+    saveLabel1: "Nombre del archivo: ",
+    saveLabel2: "Tamaño de la imagen: ",
+    okText: "Ok",
+    waterMark: "Creado con Fireworks Generator © 2016 Pedro Pablo Gonzalo",
+    bgColLabel: "Color de fondo: ",
+    bgImgLabel: "Imagen de fondo: ",
+    bgWarn1: "Esta operación reiniciará por completo el dibujo realizado.",
+    bgWarn2: "¿Desea continuar?",
+    yesText: "Si",
+    noText: "No",
+    fltWarn1: "¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?",
+    fltWarn2: "(Los cambios no podrán deshacerse más adelante)",
+    fltInf1: "Filtros disponibles",
+    fltNeg: " Invertir colores",
+    fltBaW: " Blanco y negro",
+    fltTaint: " Teñido",
+    colorText: "Color: ",
+    fltMars: " Marciano",
+    fltNight: " Nocturno",
+    fltDay: " Diurno",
+    topView: "Vista: cenital",
+    sideView: "Vista: lateral",
+    blastText: "Palmeras",
+    rdmText: "Aleatorio",
+    contWarn1: "Esta aplicación está diseñada para funcionar exclusivamente en posición horizontal. Por favor, gire su dispositivo 90º y reiníciela.",
+    contWarn2: "Esta aplicación está diseñada para funcionar exclusivamente en dispositivos con una resolución mínima de 800px de ancho. Por favor, recárgela en otro dispositivo con las características mínimas requeridas.",
+    confirmText: "Entendido",
+    fltBttnText: "Aplicar filtro",
+    bgBttnText: "Fondo",
+    clrBttnText: "Limpiar lienzo",
+    saveBttnText: "Guardar imagen",
+}
+
+// Inglés
+
+var nglsh = {
+    saveLabel1: "File name: ",
+    saveLabel2: "Picture size: ",
+    okText: "Ok",
+    waterMark: "Powered by Fireworks Generator © 2016 Pedro Pablo Gonzalo",
+    bgColLabel: "Background color: ",
+    bgImgLabel: "Background image: ",
+    bgWarn1: "This will reset current image completely.",
+    bgWarn2: "¿Do you want to proceed?",
+    yesText: "Yes",
+    noText: "No",
+    fltWarn1: "¿Are you satisfied with results, do you want to keep changes?",
+    fltWarn2: "(Changes cannot be undone past this point)",
+    fltInf1: "Available filters",
+    fltNeg: " Reverse colors",
+    fltBaW: " Black & white",
+    fltTaint: " Tainted",
+    colorText: "Color: ",
+    fltMars: " Martian",
+    fltNight: " Nightime",
+    fltDay: " Daylight",
+    topView: "Top view",
+    sideView: "Side view",
+    blastText: "\xa0\xa0\xa0Blasts\xa0\xa0\xa0\xa0",
+    rdmText: "Random",
+    contWarn1: "This software is designed to work exclusively on landscape orientation. Please, turn your device around 90º and reload it.",
+    contWarn2: "This software is designed to work exclusively on devices with 800 pixels minimun resolution. Please, use a devide featuring minimun required specs.",
+    confirmText: "Got it!",
+    fltBttnText: "Use filter",
+    bgBttnText: "Background",
+    clrBttnText: "Reset image",
+    saveBttnText: "Save picture",
+}
+
+// Asignación de idioma
+
+var idioma = spnsh;
+
 // COMENZAMOS CON LAS FUNCIONES QUE DEFINIRAN EL COMPORTAMIENTO DE LA APP (BOTONES DE OPCIONES)
 //______________________________________________________________________________________________
 
@@ -251,7 +329,7 @@ function saveCanvas() {
     var lienzoFoto = document.createElement("canvas");
     var contextoFoto = lienzoFoto.getContext("2d");
     var ventana = document.getElementById("dialogOptions");
-    var mainWindCont = '<label for="nombreArchivo">Nombre del archivo: </label><input type="text" id="nombreArchivo" placeholder="firework"><br><br><label for="dimensiones">Tamaño de la imagen: </label><select id="dimensiones"><option class="tamanos" value="1">' + parseInt(lienzo.width) + " X " + parseInt(lienzo.height) + '</option><option class="tamanos" value="2" selected>' + parseInt(lienzo.width / 2) + " X " + parseInt(lienzo.height / 2) + '</option><option class="tamanos" value="3">' + parseInt(lienzo.width / 3) + " X " + parseInt(lienzo.height / 3) + '</option><option class="tamanos" value="4">' + parseInt(lienzo.width / 4) + " X " + parseInt(lienzo.height / 4) + '</option></select><br><br><button type="button" id="saveOk">Ok</button><img src="imagenes/iconos/white_closer-min.png" id="closeSaver">';
+    var mainWindCont = '<label for="nombreArchivo">' + idioma.saveLabel1 + '</label><input type="text" id="nombreArchivo" placeholder="firework"><br><br><label for="dimensiones">' + idioma.saveLabel2 + '</label><select id="dimensiones"><option class="tamanos" value="1">' + parseInt(lienzo.width) + " X " + parseInt(lienzo.height) + '</option><option class="tamanos" value="2" selected>' + parseInt(lienzo.width / 2) + " X " + parseInt(lienzo.height / 2) + '</option><option class="tamanos" value="3">' + parseInt(lienzo.width / 3) + " X " + parseInt(lienzo.height / 3) + '</option><option class="tamanos" value="4">' + parseInt(lienzo.width / 4) + " X " + parseInt(lienzo.height / 4) + '</option></select><br><br><button type="button" id="saveOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closeSaver">';
     ventana.innerHTML = mainWindCont;
     ventana.style.top = "40%"
     ventana.style.display = "block";
@@ -283,7 +361,7 @@ function saveCanvas() {
         contextoFoto.shadowOffsetY = 3;
         contextoFoto.shadowBlur = 2;
         contextoFoto.fillStyle = "#ffffff";
-        contextoFoto.fillText("Creado con Fireworks-Generator © 2016 Pedro Pablo Gonzalo", lienzoFoto.width - ((lienzo.width / 4) * centrado), lienzoFoto.height - (16 - (saveSize * 2)));
+        contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - ((lienzo.width / 4) * centrado), lienzoFoto.height - (16 - (saveSize * 2)));
         contextoFoto.globalCompositeOperation = "source-over";
         var imgToSave = new Image();
         imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
@@ -304,7 +382,7 @@ function saveCanvas() {
 function backgroundSelector() {
     var ventana = document.getElementById("dialogOptions");
     var confirmacion = document.getElementById("dialogConfirm");
-    var mainWindCont = '<label for="colorin">Color de fondo: </label><input id="colorin" name="colorin" type="color"><br><br><label for="fotico">Imagen de fondo: </label><input id="fotico" name="fotico" type="file" accept="image/*"><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
+    var mainWindCont = '<label for="colorin">' + idioma.bgColLabel + '</label><input id="colorin" name="colorin" type="color"><br><br><label for="fotico">' + idioma.bgImgLabel + '</label><input id="fotico" name="fotico" type="file" accept="image/*"><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
     ventana.innerHTML = mainWindCont;
     ventana.style.top = "40%"
     ventana.style.display = "block";
@@ -312,7 +390,7 @@ function backgroundSelector() {
         ventana.style.display = "none";
     });
     document.getElementById("fotico").addEventListener("change", function() {
-        var mainWindCont = '<h3>Advertencia:</h3><p>Esta operación reiniciará por completo el dibujo realizado.</p><h3>¿Desea continuar?</h3><br><section id="snBtns"><button type="button" id="confirm" class="choiceBtn">Si</button><button type="button" id="deny" class="choiceBtn">No</button></section>';
+        var mainWindCont = '<h3>Advertencia:</h3><p>' + idioma.bgWarn1 + '</p><h3>' + idioma.bgWarn2 + '</h3><br><section id="snBtns"><button type="button" id="confirm" class="choiceBtn">' + idioma.yesText + '</button><button type="button" id="deny" class="choiceBtn">' + idioma.noText + '</button></section>';
         confirmacion.innerHTML = mainWindCont;
         confirmacion.style.top = "40%";
         confirmacion.style.display = "block";
@@ -381,7 +459,7 @@ function filterSetter() {
         contexto.fillRect(0, 0, lienzo.width, lienzo.height);
         contexto.globalCompositeOperation = "source-over";
         var ventana = document.getElementById("dialogConfirm");
-        var mainWindCont = '<h4>¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?</h4><p>(Los cambios no podrán deshacerse más adelante)</p><br><button type="button" id="confirm" class="choiceBtn">Si</button><button type="button" id="deny" class="choiceBtn">No</button>';
+        var mainWindCont = '<h4>' + idioma.fltWarn1 + '</h4><p>' + idioma.fltWarn2 + '</p><br><button type="button" id="confirm" class="choiceBtn">' + idioma.yesText + '</button><button type="button" id="deny" class="choiceBtn">' + idioma.noText + '</button>';
         ventana.innerHTML = mainWindCont;
         ventana.style.top = "40%";
         ventana.style.display = "block";
@@ -407,7 +485,7 @@ function filterChoose() {
     filter.color = "";
     filter.effect = "";
     var ventana = document.getElementById("dialogOptions");
-    var mainWindCont = '<h3>Filtros disponibles</h3><section id="listaFiltros"><input type="radio" name="filtro" id="negativo" value="negativo"><label for="negativo"> Invertir colores</label><hr><input type="radio" name="filtro" id="b&w" value="b&w"><label for="b&w"> Blanco y negro</label><hr><input type="radio" name="filtro" id="taint" value="taint"><label for="taint"> Teñido</label><span><label for="taintCol">Color: </label><input type="color" id="taintCol"></span><hr><input type="radio" name="filtro" id="mart" value="mart"><label for="mart"> Marciano</label><span><label for="martCol">Color: </label><input type="color" id="martCol"></span><hr><input type="radio" name="filtro" id="nighty" value="nighty"><label for="nighty"> Nocturno</label><hr><input type="radio" name="filtro" id="dayly" value="dayly"><label for="dayly"> Diurno</label><span><label for="dayCol">Color: </label><input type="color" id="dayCol"></span></section><br><button type="button" id="filtroOk">Ok</button><img src="imagenes/iconos/white_closer-min.png" id="closingIcon">';
+    var mainWindCont = '<h3>' + idioma.fltInf1 + '</h3><section id="listaFiltros"><input type="radio" name="filtro" id="negativo" value="negativo"><label for="negativo">' + idioma.fltNeg + '</label><hr><input type="radio" name="filtro" id="b&w" value="b&w"><label for="b&w">' + idioma.fltBaW + '</label><hr><input type="radio" name="filtro" id="taint" value="taint"><label for="taint">' + idioma.fltTaint + '</label><span><label for="taintCol">' + idioma.colorText + '</label><input type="color" id="taintCol"></span><hr><input type="radio" name="filtro" id="mart" value="mart"><label for="mart">' + idioma.fltMars + '</label><span><label for="martCol">' + idioma.colorText + '</label><input type="color" id="martCol"></span><hr><input type="radio" name="filtro" id="nighty" value="nighty"><label for="nighty">' + idioma.fltNight + '</label><hr><input type="radio" name="filtro" id="dayly" value="dayly"><label for="dayly">' + idioma.fltDay + '</label><span><label for="dayCol">' + idioma.colorText + '</label><input type="color" id="dayCol"></span></section><br><button type="button" id="filtroOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closingIcon">';
     ventana.innerHTML = mainWindCont;
     ventana.style.top = "30%";
     ventana.style.display = "block";
@@ -457,14 +535,14 @@ function filterChoose() {
 
 function viewSelect(){
     var botonText = document.getElementById("viewpoint");
-    if (config.vista == "lateral" && botonText.innerHTML == "Vista: cenital") {
+    if (config.vista == "lateral" && botonText.innerHTML == idioma.topView) {
         config.vista = "cenital";
-        botonText.innerHTML = "Vista: lateral";
+        botonText.innerHTML = idioma.sideView;
         return;
     }
-    if (config.vista == "cenital" && botonText.innerHTML == "Vista: lateral") {
+    if (config.vista == "cenital" && botonText.innerHTML == idioma.sideView) {
         config.vista = "lateral";
-        botonText.innerHTML = "Vista: cenital";
+        botonText.innerHTML = idioma.topView;
         return;
     }
 }
@@ -476,11 +554,11 @@ function viewSelect(){
 function blastSetter() {
     var lienzo = document.getElementById("lienzo1");
     var ventana = document.getElementById("blastChooser");
-    var mainWindCont = '<h3>Palmeras:</h3>';
+    var mainWindCont = '<h3>' + idioma.blastText + '</h3>';
     for (i = 0; i < fwSets.length; i++) {
         mainWindCont += '<img src="' + fwSets[i].blast + '" class="thumbs" id="imgLink' + i + '" width="' + lienzo.height * .085 + '" height="' + lienzo.height * .085 + '" onclick="config.set=fwSets[' + i + ']"><br>';
     };
-    mainWindCont += '<br><button type="button" id="randomize">Aleatorio</button>'
+    mainWindCont += '<br><button type="button" id="randomize">' + idioma.rdmText + '</button>'
     ventana.innerHTML = mainWindCont;
     ventana.classList.remove("blastChooserHidden");
     ventana.classList.add("blastChooserShown");
@@ -502,6 +580,29 @@ function blastSetter() {
             }, 2000);
         });
     };
+    setTimeout(function() {
+        ventana.classList.remove("blastChooserShown");
+            ventana.classList.add("blastChooserHidden");
+            setTimeOut(function() {
+                ventana.style.display = "none";
+            }, 2000);
+    }, 8000);
+}
+
+// Función para la selección de idiomas
+
+function langSetter(boton) {
+    var btnId = boton.getAttribute("id");
+    if (btnId == "spFlag") {
+        idioma = spnsh;
+        btnDisplayer();
+        return;
+    }
+    if (btnId == "ukFlag") {
+        idioma = nglsh;
+        btnDisplayer();
+        return;
+    }
 }
 
 // FUNCIONES PARA EL PROPIO FUNCIONAMIENTO DE LA APP
@@ -509,7 +610,7 @@ function blastSetter() {
 
 // Función para la ejecución del proposito principal (disparar los fuegos correctamente)
 // Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
-// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 515)
+// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 523)
 
 function blastRenderer(evento) {
     if (config.blaster == "random") {
@@ -528,6 +629,35 @@ function blastRenderer(evento) {
     }
 }
 
+function btnDisplayer() {
+    if (document.body.lastChild.getAttribute("id") != "lienzo1" || !document.body.lastChild.getAttribute("id")) {
+        var cuerpo = document.body;
+        var hijos = cuerpo.childNodes;
+        var cuantos = cuerpo.childElementCount;
+        cuerpo.removeChild(cuerpo.childNodes[cuantos - 1]);
+    }
+    var botonera = document.createElement('div');
+    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '</button><button type="button" id="viewpoint">' + idioma.topView + '</button><button type="button" id="filtro">' + idioma.fltBttnText + '</button><button type="button" id="background">' + idioma.bgBttnText + '</button><button type="button" id="clear">' + idioma.clrBttnText + '</button><button type="button" id="save">' + idioma.saveBttnText + '</button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside>';
+    document.body.appendChild(botonera);
+    if (idioma == spnsh) {
+        document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
+    }
+    if (idioma == nglsh) {
+        document.getElementById("ukFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
+    }
+
+    // Manejadores de evento de los botones
+
+        document.getElementById("clear").addEventListener("click", function(){canvasReset();});
+        document.getElementById("save").addEventListener("click", function(){saveCanvas();});
+        document.getElementById("background").addEventListener("click", function(){backgroundSelector();});
+        document.getElementById("filtro").addEventListener("click", function(){filterChoose();});
+        document.getElementById("viewpoint").addEventListener("click", function(){viewSelect();});
+        document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
+        document.getElementById("spFlag").addEventListener("click", function(){langSetter(this);});
+        document.getElementById("ukFlag").addEventListener("click", function(){langSetter(this);});
+}
+
 // Función generadora de contenidos.
 // Genera dinámicamente todo el contenido del documento; tras comprobar que cumple los requerimientos
 // realiza la carga del body; canvas, botones y ventanas auxiliares. También reinicia el canvas a su
@@ -535,7 +665,7 @@ function blastRenderer(evento) {
 
 function contentSetter() {
     if (window.innerWidth < window.innerHeight) {
-        var displayAlarm = '<aside id="displayAlarm"><h2>Esta aplicación está diseñada para funcionar exclusivamente en posición horizontal. Por favor, gire su dispositivo 90º y reiníciela.</h2><button type="button" id="resetter">Entendido</button></aside>';
+        var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn1 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
         document.body.innerHTML = displayAlarm;
         document.getElementById("resetter").addEventListener("click", function() {
             window.history.back();
@@ -543,25 +673,17 @@ function contentSetter() {
     }
     else {
         if (window.innerWidth < 800) {
-            var displayAlarm = '<aside id="displayAlarm"><h2>Esta aplicación está diseñada para funcionar exclusivamente en dispositivos con una resolución mínima de 800px de ancho. Por favor, recárgela en otro dispositivo con las características mínimas requeridas.</h2><button type="button" id="resetter">Entendido</button></aside>';
+            var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn2 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
             document.body.innerHTML = displayAlarm;
             document.getElementById("resetter").addEventListener("click", function() {
             window.history.back();
             });
         }
         else {
-            document.body.innerHTML = '<canvas id="lienzo1" width="' + window.innerWidth * .9375 + '" height="' + window.innerHeight * .94 + '" onclick="blastRenderer(event)"></canvas><section id="botonera"><button type="button" id="blasts">Palmeras</button><button type="button" id="viewpoint">Vista: cenital</button><button type="button" id="filtro">Aplicar filtro</button><button type="button" id="background">Fondo</button><button type="button" id="clear">Limpiar lienzo</button><button type="button" id="save">Guardar imagen</button></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside>'
+            document.body.innerHTML = '<canvas id="lienzo1" width="' + window.innerWidth * .9375 + '" height="' + window.innerHeight * .94 + '" onclick="blastRenderer(event)"></canvas>';
+            btnDisplayer();
             backgrColSetter();
             backgrImgSetter();
-
-        // Manejadores de evento de los botones
-
-            document.getElementById("clear").addEventListener("click", function(){canvasReset();});
-            document.getElementById("save").addEventListener("click", function(){saveCanvas();});
-            document.getElementById("background").addEventListener("click", function(){backgroundSelector();});
-            document.getElementById("filtro").addEventListener("click", function(){filterChoose();});
-            document.getElementById("viewpoint").addEventListener("click", function() {viewSelect();});
-            document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
         }
     }
 }

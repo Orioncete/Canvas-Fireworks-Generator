@@ -16,7 +16,7 @@ body, html {
 button {
     margin: 0 .1%;
     padding: 0;
-    width: 16.45%;
+    width: 14.9%;
     font-size: 1.5em;
     border-radius: .5em;
     border: solid 2px black;
@@ -177,6 +177,15 @@ button:hover {
     border: solid 4px red;
     background-color: black;
     color: red;
+}
+.lngIcon {
+    height: 2em;
+    width: 3em;
+    margin: -.5em 0 -.5em 2.2em;
+}
+.lngIcon:hover {
+    background-color: darkgrey;
+    box-shadow: -2px -2px 3px darkgrey;
 }
 
 /* Media Queries para tamaños inferiores al recomendado */
