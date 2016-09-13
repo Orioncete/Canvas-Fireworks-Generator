@@ -95,7 +95,7 @@ var filter = {
     effect: ""
 };
 
-// PAQUETES DE IDIOMA----------------------------------------------------
+// Paquetes de idioma ----------------------------------------------------
 
 // Español
 
@@ -131,6 +131,12 @@ var spnsh = {
     bgBttnText: "Fondo",
     clrBttnText: "Limpiar lienzo",
     saveBttnText: "Guardar imagen",
+    blastHelp: 'Elija uno de los diseños disponibles para reproducirlo en la imagen al hacer click o seleccione "Aleatorio" para reproducir uno al azar en cada pulsación.',
+    viewHelp: 'Seleccione el origen de los cohetes; Si elije la vista cenital, los cohetes partirán del centro de la imagen. Con la vista lateral, partirán de la parte inferior.',
+    fltHelp: 'Seleccione un filtro para aplicarlo a la imagen, algunos filtros necesitan que seleccione también un color para funcionar.',
+    bgHelp: 'Seleccione una imagen o un color para el fondo de la imagen.<br>Tenga en cuenta que esta operación reiniciará por completo el trabajo que ya haya realizado en la imagen.',
+    clrHelp: 'Reinicia la escena por completo, manteniendo la imagen o color que haya seleccionado para el fondo.',
+    saveHelp: 'Guarda su imagen en formato .jpg dentro de su equipo, para compartirla donde desee o emplearla en futuras sesiones de edición.<br>Podrá elegir un nombre para su fichero y un tamaño entre cuatro (se recomienda el tamaño máximo ofrecido para futuras sesiones con este software).'
 }
 
 // Inglés
@@ -167,9 +173,15 @@ var nglsh = {
     bgBttnText: "Background",
     clrBttnText: "Reset image",
     saveBttnText: "Save picture",
+    blastHelp: 'Choose one of the available displayed designs to apply it on screen when you click on it or select "Random" to apply one at random on each click.',
+    viewHelp: 'Choose the origin of rockets; If you pick top view, rockets depart from the center, pick side view to get them depart from the bottom of picture.',
+    fltHelp: 'Choose an optical filter to apply to the picture, some filters also require you too choose a color for proper function.',
+    bgHelp: 'Pick a picture or color to use it as your image background<br>Keep in mind that this function will completely reset any previous work on the current picture.',
+    clrHelp: 'Completely resets your picture maintaining the image or color you chose as background.',
+    saveHelp: "Saves your work on .jpg format into your computer so you can share it or keep it for further work with this software.<br>You'll be asked to pick a file name and size amongst four (I strongly recommend the biggest available size if you plan to re-use the file again on this software)."
 }
 
-// Asignación de idioma
+// Asignación de idioma inicial
 
 var idioma = spnsh;
 
@@ -535,14 +547,14 @@ function filterChoose() {
 
 function viewSelect(){
     var botonText = document.getElementById("viewpoint");
-    if (config.vista == "lateral" && botonText.innerHTML == idioma.topView) {
+    if (config.vista == "lateral" && botonText.innerHTML == idioma.topView + '<span class="info">?</span>') {
         config.vista = "cenital";
-        botonText.innerHTML = idioma.sideView;
+        botonText.innerHTML = idioma.sideView + '<span class="info">?</span>';
         return;
     }
-    if (config.vista == "cenital" && botonText.innerHTML == idioma.sideView) {
+    if (config.vista == "cenital" && botonText.innerHTML == idioma.sideView + '<span class="info">?</span>') {
         config.vista = "lateral";
-        botonText.innerHTML = idioma.topView;
+        botonText.innerHTML = idioma.topView + '<span class="info">?</span>';
         return;
     }
 }
@@ -567,7 +579,7 @@ function blastSetter() {
             config.blaster = "manual";
             ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
-            setTimeOut(function() {
+            setTimeout(function() {
                 ventana.style.display = "none";
             }, 2000);
         });
@@ -575,7 +587,7 @@ function blastSetter() {
             config.blaster = "random";
             ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
-            setTimeOut(function() {
+            setTimeout(function() {
                 ventana.style.display = "none";
             }, 2000);
         });
@@ -583,10 +595,119 @@ function blastSetter() {
     setTimeout(function() {
         ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
-            setTimeOut(function() {
+            setTimeout(function() {
                 ventana.style.display = "none";
             }, 2000);
     }, 8000);
+}
+
+// FUNCIONES PARA EL PROPIO FUNCIONAMIENTO DE LA APP
+//___________________________________________________
+
+// Función para la ejecución del proposito principal (disparar los fuegos correctamente)
+// Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
+// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 613)
+
+function blastRenderer(evento) {
+    if (config.blaster == "random") {
+        var indice = Math.round(Math.ceil(Math.random() * (fwSets.length - 1)));
+        config.set = fwSets[indice];
+    }
+    if (config.vista == "lateral") {
+        estelaVert(evento);
+        setTimeout(function() {
+            boomVert(evento);
+        }, 200);
+        return;
+    }
+    if (config.vista == "cenital") {
+        estelaCentr(evento);
+        setTimeout(function() {
+            boomCentr(evento);
+        }, 200);
+        return;
+    }
+}
+
+// Función para generar y mostrar las ventanas de ayuda de cada botón
+
+function displayHelp(origen) {
+    var ventana = document.getElementById("dialogHelp");
+    var parentId = origen.parentElement.getAttribute("id");
+    var posicion = origen.parentElement.getBoundingClientRect();
+    switch (parentId) {
+        case "blasts":
+            var mainWindCont = '<p>' + idioma.blastHelp + '</p>';
+            break;
+        case "viewpoint":
+            var mainWindCont = '<p>' + idioma.viewHelp + '</p>';
+            break;
+        case "filtro":
+            var mainWindCont = '<p>' + idioma.fltHelp + '</p>';
+            break;
+        case "background":
+            var mainWindCont = '<p>' + idioma.bgHelp + '</p>';
+            break;
+        case "clear":
+            var mainWindCont = '<p>' + idioma.clrHelp + '</p>';
+            break;
+        case "save":
+            var mainWindCont = '<p>' + idioma.saveHelp + '</p>';
+    }
+    ventana.innerHTML = mainWindCont;
+    ventana.style.position = "absolute";
+    ventana.style.left = posicion.left + "px";
+    ventana.style.width = (posicion.width * 0.72) + "px";
+    ventana.style.top = (posicion.top - ventana.getBoundingClientRect().height - posicion.height) + "px";
+    ventana.classList.remove("hiddenHelp");
+    ventana.classList.add("shownHelp");
+}
+
+// Función para ocultar las ventanas de ayuda de los botones
+
+function hideHelp() {
+    var ventana = document.getElementById("dialogHelp");
+    ventana.classList.remove("shownHelp");
+    ventana.classList.add("hiddenHelp");
+}
+
+// Función para la creación y gestión de la botonera inferior, tambien permite su traducción
+// instantanea sin necesidad de recargar el documento y asigna los manejsdores de evento de los botones.
+
+function btnDisplayer() {
+    if (document.body.lastChild.getAttribute("id") != "lienzo1" || !document.body.lastChild.getAttribute("id")) {
+        var cuerpo = document.body;
+        var hijos = cuerpo.childNodes;
+        var cuantos = cuerpo.childElementCount;
+        cuerpo.removeChild(cuerpo.childNodes[cuantos - 1]);
+    }
+    var botonera = document.createElement('div');
+    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + idioma.topView + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside>';
+    document.body.appendChild(botonera);
+    if (idioma == spnsh) {
+        document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
+    }
+    if (idioma == nglsh) {
+        document.getElementById("ukFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
+    }
+
+    // Manejadores de evento de los botones
+
+    document.getElementById("clear").addEventListener("click", function(){canvasReset();});
+    document.getElementById("save").addEventListener("click", function(){saveCanvas();});
+    document.getElementById("background").addEventListener("click", function(){backgroundSelector();});
+    document.getElementById("filtro").addEventListener("click", function(){filterChoose();});
+    document.getElementById("viewpoint").addEventListener("click", function(){viewSelect();});
+    document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
+    document.getElementById("spFlag").addEventListener("click", function(){langSetter(this);});
+    document.getElementById("ukFlag").addEventListener("click", function(){langSetter(this);});
+    var helpButtons = document.getElementsByClassName("info");
+    for (i = 0; i < helpButtons.length; i++) {
+        helpButtons[i].addEventListener("click", function(e) {
+            e.stopPropagation();
+            displayHelp(this);});
+        helpButtons[i].addEventListener("mouseout", function() {hideHelp();});
+    }
 }
 
 // Función para la selección de idiomas
@@ -605,63 +726,10 @@ function langSetter(boton) {
     }
 }
 
-// FUNCIONES PARA EL PROPIO FUNCIONAMIENTO DE LA APP
-//___________________________________________________
-
-// Función para la ejecución del proposito principal (disparar los fuegos correctamente)
-// Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
-// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 523)
-
-function blastRenderer(evento) {
-    if (config.blaster == "random") {
-        var indice = Math.round(Math.ceil(Math.random() * (fwSets.length - 1)));
-        config.set = fwSets[indice];
-    }
-    if (config.vista == "lateral") {
-        estelaVert(evento);
-        boomVert(evento);
-        return;
-    }
-    if (config.vista == "cenital") {
-        estelaCentr(evento);
-        boomCentr(evento);
-        return;
-    }
-}
-
-function btnDisplayer() {
-    if (document.body.lastChild.getAttribute("id") != "lienzo1" || !document.body.lastChild.getAttribute("id")) {
-        var cuerpo = document.body;
-        var hijos = cuerpo.childNodes;
-        var cuantos = cuerpo.childElementCount;
-        cuerpo.removeChild(cuerpo.childNodes[cuantos - 1]);
-    }
-    var botonera = document.createElement('div');
-    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '</button><button type="button" id="viewpoint">' + idioma.topView + '</button><button type="button" id="filtro">' + idioma.fltBttnText + '</button><button type="button" id="background">' + idioma.bgBttnText + '</button><button type="button" id="clear">' + idioma.clrBttnText + '</button><button type="button" id="save">' + idioma.saveBttnText + '</button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside>';
-    document.body.appendChild(botonera);
-    if (idioma == spnsh) {
-        document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
-    }
-    if (idioma == nglsh) {
-        document.getElementById("ukFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
-    }
-
-    // Manejadores de evento de los botones
-
-        document.getElementById("clear").addEventListener("click", function(){canvasReset();});
-        document.getElementById("save").addEventListener("click", function(){saveCanvas();});
-        document.getElementById("background").addEventListener("click", function(){backgroundSelector();});
-        document.getElementById("filtro").addEventListener("click", function(){filterChoose();});
-        document.getElementById("viewpoint").addEventListener("click", function(){viewSelect();});
-        document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
-        document.getElementById("spFlag").addEventListener("click", function(){langSetter(this);});
-        document.getElementById("ukFlag").addEventListener("click", function(){langSetter(this);});
-}
-
 // Función generadora de contenidos.
-// Genera dinámicamente todo el contenido del documento; tras comprobar que cumple los requerimientos
-// realiza la carga del body; canvas, botones y ventanas auxiliares. También reinicia el canvas a su
-// estado de inicio (color y fondo) y añade los manejadores de evento necesarios.
+// Genera dinámicamente el canvas y sus medidas; tras comprobar que el viewport cumple
+// los requerimientos realiza la carga del canvas y le asigna medidas relativas al viewport.
+// También le asigna su estado de inicio (color y fondo).
 
 function contentSetter() {
     if (window.innerWidth < window.innerHeight) {

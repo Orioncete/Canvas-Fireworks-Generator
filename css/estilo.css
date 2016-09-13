@@ -56,6 +56,14 @@ button:hover {
 #dialogOptions {
 	font-size: 1.5em;
 }
+#dialogHelp {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1.2em;
+    padding: 0 2em;
+    border-radius: 1em;
+    text-shadow: -1px 1px 3px black;
+}
 #closeIcon {
     position: absolute;
     left: 92%;
@@ -106,20 +114,36 @@ button:hover {
     top: .5em;
 }
 .blastChooserHidden {   /*Clase para ocultar la ventana lateral (slide-out)*/
-    -webkit-transition: margin 1s ease-out;
-    -moz-transition: margin 1s ease-out;
-    -ms-transition: margin 1s ease-out;
-    -o-transition: margin 1s ease-out;
-    transition: margin 1s ease-out;
+    -webkit-transition: margin .6s ease-out;
+    -moz-transition: margin .6s ease-out;
+    -ms-transition: margin .6s ease-out;
+    -o-transition: margin .6s ease-out;
+    transition: margin .6s ease-out;
     margin-left: -13%;
 }
 .blastChooserShown {   /*Clase para mostrar la ventana lateral (slide-in)*/
-    -webkit-transition: margin 1.2s ease-in;
-    -moz-transition: margin 1.2s ease-in;
-    -ms-transition: margin 1.2s ease-in;
-    -o-transition: margin 1.2s ease-in;
-    transition: margin 1.2s ease-in;
+    -webkit-transition: margin 1s ease-in;
+    -moz-transition: margin 1s ease-in;
+    -ms-transition: margin 1s ease-in;
+    -o-transition: margin 1s ease-in;
+    transition: margin 1s ease-in;
     margin-left: 0;
+}
+.hiddenHelp {   /*Clase para ocultar la ventana de ayuda (flash-out)*/
+    -webkit-transition: opacity 1s ease-out;
+    -moz-transition: opacity 1s ease-out;
+    -ms-transition: opacity 1s ease-out;
+    -o-transition: opacity 1s ease-out;
+    transition: opacity 1s ease-out;
+    opacity: 0;
+}
+.shownHelp {   /*Clase para mostrar la ventana de ayuda (flash-in)*/
+    -webkit-transition: opacity 1.2s ease-in;
+    -moz-transition: opacity 1.2s ease-in;
+    -ms-transition: opacity 1.2s ease-in;
+    -o-transition: opacity 1.2s ease-in;
+    transition: opacity 1.2s ease-in;
+    opacity: 100%;
 }
 #blastChooser {
     width: 12%;
@@ -180,12 +204,25 @@ button:hover {
 }
 .lngIcon {
     height: 2em;
-    width: 3em;
-    margin: -.5em 0 -.5em 2.2em;
+    width: 2.7%;
+    margin: -.5em 0 -.5em 1.9%;
 }
 .lngIcon:hover {
     background-color: darkgrey;
     box-shadow: -2px -2px 3px darkgrey;
+}
+.info {
+    float: right;
+    background-color: white;
+    color: black;
+    width: 1.2em;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: .2em;
+}
+.info:hover {
+    background-color: black;
+    color: white;
 }
 
 /* Media Queries para tamaños inferiores al recomendado */
