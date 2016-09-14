@@ -87,7 +87,8 @@ var config = {
     fondo: "imagenes/paris-min.jpg",
     vista: "lateral",
     blaster: "manual",
-    set: fwSets[3]
+    set: fwSets[3],
+    legalconsent: ""
 };
 
 var filter = {
@@ -134,9 +135,11 @@ var spnsh = {
     blastHelp: 'Elija uno de los diseños disponibles para reproducirlo en la imagen al hacer click o seleccione "Aleatorio" para reproducir uno al azar en cada pulsación.',
     viewHelp: 'Seleccione el origen de los cohetes; Si elije la vista cenital, los cohetes partirán del centro de la imagen. Con la vista lateral, partirán de la parte inferior.',
     fltHelp: 'Seleccione un filtro para aplicarlo a la imagen, algunos filtros necesitan que seleccione también un color para funcionar.',
-    bgHelp: 'Seleccione una imagen o un color para el fondo de la imagen.<br>Tenga en cuenta que esta operación reiniciará por completo el trabajo que ya haya realizado en la imagen.',
+    bgHelp: 'Seleccione una imagen o un color para el fondo de la imagen.<br>Tenga en cuenta que esta operación reiniciará por completo el trabajo que ya haya realizado en la imagen.<br>Se recomiendan imágenes con la misma relación de aspecto que su pantalla (p.ej. 16:9, 4:3, etc.)',
     clrHelp: 'Reinicia la escena por completo, manteniendo la imagen o color que haya seleccionado para el fondo.',
-    saveHelp: 'Guarda su imagen en formato .jpg dentro de su equipo, para compartirla donde desee o emplearla en futuras sesiones de edición.<br>Podrá elegir un nombre para su fichero y un tamaño entre cuatro (se recomienda el tamaño máximo ofrecido para futuras sesiones con este software).'
+    saveHelp: 'Guarda su imagen en formato .jpg dentro de su equipo, para compartirla donde desee o emplearla en futuras sesiones de edición.<br>Podrá elegir un nombre para su fichero y un tamaño entre cuatro (se recomienda el tamaño máximo ofrecido para futuras sesiones con este software).',
+    legalWarn: 'Este programa recoge contenido generado por el usuario con fines publicitarios y de presentación.<br>Bajo ningún concepto se publicará contenido que pueda contener datos personales del usuario (caras, matrículas, etc.).<br><br>¿Desea que la aplicación recoja contenido generado por usted durante su uso?</p>',
+    legalWarnTitle: "Importante:"
 }
 
 // Inglés
@@ -176,9 +179,11 @@ var nglsh = {
     blastHelp: 'Choose one of the available displayed designs to apply it on screen when you click on it or select "Random" to apply one at random on each click.',
     viewHelp: 'Choose the origin of rockets; If you pick top view, rockets depart from the center, pick side view to get them depart from the bottom of picture.',
     fltHelp: 'Choose an optical filter to apply to the picture, some filters also require you too choose a color for proper function.',
-    bgHelp: 'Pick a picture or color to use it as your image background<br>Keep in mind that this function will completely reset any previous work on the current picture.',
+    bgHelp: 'Pick a picture or color to use it as your image background<br>Keep in mind that this function will completely reset any previous work on the current picture.<br>Pictures matching your screen aspect ratio are recommended (e.g. 16:9, 4:3, etc.)',
     clrHelp: 'Completely resets your picture maintaining the image or color you chose as background.',
-    saveHelp: "Saves your work on .jpg format into your computer so you can share it or keep it for further work with this software.<br>You'll be asked to pick a file name and size amongst four (I strongly recommend the biggest available size if you plan to re-use the file again on this software)."
+    saveHelp: "Saves your work on .jpg format into your computer so you can share it or keep it for further work with this software.<br>You'll be asked to pick a file name and size amongst four (I strongly recommend the biggest available size if you plan to re-use the file again on this software).",
+    legalWarn: "This software gathers user's generated content for advertising and broadcasting pourposes.<br>On no account we'll broadcast any content containing user's personal data (like faces, car plates, etc.)<br><br>Do you want to allow this software to gather generated content during use?",
+    legalWarnTitle: "Attention:"
 }
 
 // Asignación de idioma inicial
@@ -195,11 +200,11 @@ var idioma = spnsh;
 function estelaCentr(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
-    var radio1 = Math.sqrt(Math.pow(Math.abs((evento.clientX  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
-    var degradado1 = contexto.createRadialGradient((lienzo.width / 2), (lienzo.height / 2), 0, evento.clientX - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop, radio1 * 0.1);
+    var radio1 = Math.sqrt(Math.pow(Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
+    var degradado1 = contexto.createRadialGradient((lienzo.width / 2), (lienzo.height / 2), 0, (evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop, radio1 * 0.1);
     contexto.beginPath();
     contexto.moveTo((lienzo.width / 2), (lienzo.height / 2));
-    contexto.lineTo(evento.clientX - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
+    contexto.lineTo((evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
     contexto.lineWidth = (radio1 / (lienzo.width / 2)) * 8;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
@@ -221,19 +226,19 @@ function boomCentr(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     var imagen = new Image();
-    var hptns = Math.sqrt(Math.pow(Math.abs((evento.clientX  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
-    var seno = Math.abs((evento.clientX  -  lienzo.offsetLeft) - (lienzo.width / 2)) / hptns;
+    var hptns = Math.sqrt(Math.pow(Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
+    var seno = Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)) / hptns;
     var coseno = Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)) / hptns;
-    if (evento.clientX - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
         var angulo = Math.asin(seno);
     }
-    if (evento.clientX - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
         var angulo = -1 * ((Math.asin(seno) * 180 / Math.PI) + 180) * Math.PI / 180;
     }
-    if (evento.clientX - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
         var angulo = ((Math.asin(seno) * 180 / Math.PI) + 180) * Math.PI / 180;
     }
-    if (evento.clientX - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
         var angulo = -1 * Math.asin(seno);
     }
     imagen.src = config.set.blast;
@@ -241,14 +246,14 @@ function boomCentr(evento) {
         var anchoEscala = imagen.width * (Math.abs(hptns) / (lienzo.width / 2));
         var altoEscala = imagen.height * (Math.abs(hptns) / (lienzo.width / 2));
         contexto.save();
-        contexto.translate((evento.clientX - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
+        contexto.translate(((evento.clientX * 0.99) - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
         contexto.rotate(angulo);
         contexto.drawImage(imagen, 0 - anchoEscala / 2, 0 - altoEscala / 2, anchoEscala, altoEscala);
         contexto.restore();
     }
 }
 
-// Funciónes para definir y usar un cohete de ascenso vertical (desde el suelo)
+// Funciones para definir y usar un cohete de ascenso vertical (desde el suelo)
 
 // Función que define y dibuja la estela
 
@@ -256,10 +261,10 @@ function estelaVert(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     var altura = evento.clientY - lienzo.offsetTop;
-    var degradado1 = contexto.createLinearGradient(evento.clientX, lienzo.height, evento.clientX, evento.clientY);
+    var degradado1 = contexto.createLinearGradient((evento.clientX * 0.99), lienzo.height, (evento.clientX * 0.99), evento.clientY);
     contexto.beginPath();
-    contexto.moveTo(evento.clientX - lienzo.offsetLeft, lienzo.height);
-    contexto.lineTo(evento.clientX - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
+    contexto.moveTo((evento.clientX * 0.99) - lienzo.offsetLeft, lienzo.height);
+    contexto.lineTo((evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
     contexto.lineWidth = 1 + (altura / lienzo.height) * 5;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
@@ -287,7 +292,7 @@ function boomVert(evento) {
     imagen.onload = function() {
         var anchoEscala = imagen.width * escala;
         var altoEscala = imagen.height * escala;
-        contexto.drawImage(imagen, ((evento.clientX - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
+        contexto.drawImage(imagen, (((evento.clientX * 0.99) - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
     }
 }
 
@@ -333,7 +338,8 @@ function backgrColSetter() {
 // (Se ha optado por este formato dada su menor extensión y los errores que generan
 // los .png de gran tamaño durante la descarga en algunos equipos).
 // También genera la ventana de selección de tamaño y nombre de archivo (incluido uno por defecto),
-// y añade una marca de agua a la imagen.
+// y añade una marca de agua a la imagen. Además, si el usuario ha dado su consentimiento, el
+// contenido guardado se almacenará tambien en el Storage de Firebase.
 
 function saveCanvas() {
     var lienzo = document.getElementById("lienzo1");
@@ -379,10 +385,19 @@ function saveCanvas() {
         imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
         var descarga = document.createElement("a");
         descarga.href = imgToSave.src;
-        descarga.type = "image/png";
+        descarga.type = "image/jpeg";
         descarga.download = fileName || "Fireworks-Generator © 2016 Pedro Pablo Gonzalo";
         descarga.target = "_blank";
         descarga.click();
+        if (config.legalconsent == "true") { // Si el usuario ha dado consentimiento para compartir el contenido...
+            lienzoFoto.toBlob(function(blob){ // Generamos un 'blob' para enviarlo a Firebase como contenido
+                var archivo = new Image();
+                archivo.src = blob;
+                archivo.type = "image/jpeg";
+                var storageRef = firebase.storage().ref("User_pictures/" + fileName + ".jpg"); // Asocimos la referencia del storage de Firebase
+                storageRef.put(blob); // Con 'put()' enviamos el archivo al storage de Firebase
+            });
+        }
         ventana.style.display = "none";
     });
 }
@@ -572,6 +587,11 @@ function blastSetter() {
     };
     mainWindCont += '<br><button type="button" id="randomize">' + idioma.rdmText + '</button>'
     ventana.innerHTML = mainWindCont;
+    ventana.style.display = "block";
+    var desvanecer = setTimeout(function() {
+        ventana.style.display = "none";
+    }, 2000);
+    clearTimeout(desvanecer);
     ventana.classList.remove("blastChooserHidden");
     ventana.classList.add("blastChooserShown");
     for (i = 0; i < fwSets.length; i++) {
@@ -579,26 +599,38 @@ function blastSetter() {
             config.blaster = "manual";
             ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
-            setTimeout(function() {
-                ventana.style.display = "none";
-            }, 2000);
+            desvanecer;
         });
         document.getElementById("randomize").addEventListener("click", function() {
             config.blaster = "random";
             ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
-            setTimeout(function() {
-                ventana.style.display = "none";
-            }, 2000);
+            desvanecer;
         });
     };
     setTimeout(function() {
         ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
-            setTimeout(function() {
-                ventana.style.display = "none";
-            }, 2000);
+            desvanecer;
     }, 8000);
+}
+
+// Función para añadir sonido a los cohetes (ascenso y explosión).
+
+var lista = {}; // Aqui se genera la colección dinámica de sonidos que se esten usando (cola de reproducción)
+var sonidos = { // Esta es la lista de sonidos prefijados que usaremos
+    subida: "sounds/ascenso.mp3",
+    explosion: "sounds/explosion.mp3"
+}
+function toca(sonido) {
+    var indice, numerador;
+    numerador = new Date(); // Usamos un objeto date para obtener numeradores correlativos
+    indice = sonido + numerador.getTime(); // y generamos un indice correlativo en cola de reproducción
+    lista[indice] = new Audio(sonidos[sonido]); // Generamos un nuevo sonido en cola de reproduccion con el sonido solicitado a la función.
+    lista[indice].onended = function () {
+        delete lista[indice]; // Y lo eliminaremos cuando termine de reproducirse para desaturar memoria
+    };
+    lista[indice].play(); // A continuación lo reproducimos.
 }
 
 // FUNCIONES PARA EL PROPIO FUNCIONAMIENTO DE LA APP
@@ -614,17 +646,21 @@ function blastRenderer(evento) {
         config.set = fwSets[indice];
     }
     if (config.vista == "lateral") {
+        toca("subida");
         estelaVert(evento);
         setTimeout(function() {
+            toca("explosion");
             boomVert(evento);
-        }, 200);
+        }, 500);
         return;
     }
     if (config.vista == "cenital") {
+        toca("subida");
         estelaCentr(evento);
         setTimeout(function() {
+            toca("explosion");
             boomCentr(evento);
-        }, 200);
+        }, 500);
         return;
     }
 }
@@ -655,6 +691,7 @@ function displayHelp(origen) {
             var mainWindCont = '<p>' + idioma.saveHelp + '</p>';
     }
     ventana.innerHTML = mainWindCont;
+    ventana.style.display = "block";
     ventana.style.position = "absolute";
     ventana.style.left = posicion.left + "px";
     ventana.style.width = (posicion.width * 0.72) + "px";
@@ -669,10 +706,13 @@ function hideHelp() {
     var ventana = document.getElementById("dialogHelp");
     ventana.classList.remove("shownHelp");
     ventana.classList.add("hiddenHelp");
+    setTimeout(function(){
+        ventana.style.display = "none";
+    }, 1200);
 }
 
 // Función para la creación y gestión de la botonera inferior, tambien permite su traducción
-// instantanea sin necesidad de recargar el documento y asigna los manejsdores de evento de los botones.
+// instantanea sin necesidad de recargar el documento y asigna los manejadores de evento de los botones.
 
 function btnDisplayer() {
     if (document.body.lastChild.getAttribute("id") != "lienzo1" || !document.body.lastChild.getAttribute("id")) {
@@ -682,7 +722,7 @@ function btnDisplayer() {
         cuerpo.removeChild(cuerpo.childNodes[cuantos - 1]);
     }
     var botonera = document.createElement('div');
-    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + idioma.topView + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside>';
+    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + idioma.topView + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside>';
     document.body.appendChild(botonera);
     if (idioma == spnsh) {
         document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
@@ -726,6 +766,43 @@ function langSetter(boton) {
     }
 }
 
+// Función para la obtención del consentimiento del usuario para acceder a su contenido
+
+function legalConsent() {
+    if (config.legalconsent == "") {
+        var repeticion = setTimeout(function() {
+            legalConsent();
+        }, 180000);
+    }
+    var displayLegal = document.getElementById("legalWarning");
+    var mainWindCont = '<h1>' + idioma.legalWarnTitle + '</h1><h3>' + idioma.legalWarn + '</h3><br><button type="button" id="confirmLegal">' + idioma.yesText + '</button><button type="button" id="denyLegal">' + idioma.noText + '</button>';
+    displayLegal.innerHTML = mainWindCont;
+    displayLegal.style.display = "block";
+    displayLegal.classList.remove("hiddenHelp");
+    displayLegal.classList.add("shownHelp");
+    document.getElementById("confirmLegal").addEventListener("click", function() {
+        config.legalconsent = "true";
+        displayLegal.classList.remove("showHelp");
+        displayLegal.classList.add("hiddenHelp");
+        clearTimeout(repeticion);
+        displayLegal.style.display = "none";
+    });
+    document.getElementById("denyLegal").addEventListener("click", function() {
+        config.legalconsent = "false";
+        displayLegal.classList.remove("showHelp");
+        displayLegal.classList.add("hiddenHelp");
+        clearTimeout(repeticion);
+        displayLegal.style.display = "none";
+    });
+    setTimeout(function() {
+        displayLegal.classList.remove("showHelp");
+        displayLegal.classList.add("hiddenHelp");
+        setTimeout(function() {
+            displayLegal.style.display = "none";
+        }, 1200);
+    }, 30000);
+}
+
 // Función generadora de contenidos.
 // Genera dinámicamente el canvas y sus medidas; tras comprobar que el viewport cumple
 // los requerimientos realiza la carga del canvas y le asigna medidas relativas al viewport.
@@ -752,6 +829,7 @@ function contentSetter() {
             btnDisplayer();
             backgrColSetter();
             backgrImgSetter();
+            legalConsent();
         }
     }
 }
