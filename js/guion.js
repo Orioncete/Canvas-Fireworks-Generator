@@ -142,7 +142,7 @@ var spnsh = {
     legalWarnTitle: "Importante:",
     noCanvas: 'Su navegador actual no soporta la API WebGL.<br>Por favor, actualize los drivers de su tarjeta gráfica o instale un navegador de este siglo y recargue la aplicación.',
     dwldText: 'Descargar',
-    noIE: 'Este navegador no soporta la función de guardado.<br>Si desea disfrutar del total de funciones de esta aplicación considere instalar un navegador decente como Chrome o Firefox.'
+    noIE: 'Internet Explorer no soporta esta función.<br>Si desea disfrutar del total de funciones de esta aplicación plantéese instalar un navegador decente como Chrome o Firefox.'
 }
 
 // Inglés
@@ -189,7 +189,7 @@ var nglsh = {
     legalWarnTitle: "Attention:",
     noCanvas: "Your browser doesn´t support WebGL API.<br>Please, update your GPU drivers or install a current century browser and reload this app.",
     dwldText: 'Download',
-    noIE: "This browser doesn't allow save function, sorry.<br>If you want to fully enjoy this software functionality, please consider installing a decent browser like Chrome or Firefox."
+    noIE: "Internet Explorer doesn't allow this function, sorry.<br>If you want to fully enjoy this software functionality, please consider installing a decent browser like Chrome or Firefox."
 }
 
 // Asignación de idioma inicial
@@ -202,18 +202,17 @@ else {
     var idioma = nglsh;
 }
 
+// FUNCIONES DE DEFINICION DEL COMPORTAMIENTO DE LOS COHETES Y SUS ESTELAS
+//________________________________________________________________________
 
 // Asignación de un coeficiente gráfico según el navegador usado para corregir la deteción del cursor
 
-if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
+//if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
     var adjustment = 0.99;
-}
-if (navigator.userAgent.indexOf("Firefox") != -1) {
-    var adjustment = 1;
-}
-
-// COMENZAMOS CON LAS FUNCIONES QUE DEFINIRAN EL COMPORTAMIENTO DE LA APP (BOTONES DE OPCIONES)
-//______________________________________________________________________________________________
+//}
+//if (navigator.userAgent.indexOf("Firefox") != -1) {
+//    var adjustment = 1;
+//}
 
 // Funciones para definir y usar un cohete de ascenso radial (desde el centro del lienzo)
 
@@ -317,6 +316,9 @@ function boomVert(evento) {
         contexto.drawImage(imagen, (((evento.clientX * adjustment) - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
     }
 }
+
+// FUNCIONES PARA CONFIGURACION Y MODIFICACION DEL ELEMENTO CANVAS
+// _______________________________________________________________
 
 // Función para el borrado o reinicio del lienzo
 
@@ -446,6 +448,7 @@ function saveCanvas() {
         ventana.innerHTML = mainWindCont;
         ventana.style.display = "block";
         ventana.style.top = "30%";
+        ventana.style.padding = "auto 2rem";
         var boton = document.getElementById("understood");
         boton.style.fontSize = "1.5rem";
         boton.style.width = "30%";
@@ -526,7 +529,7 @@ function transparencyAdder(valor, transp) {
 }
 
 // Función para la aplicación de filtros, genera una ventana de confirmación de datos
-// y permite un retorno al estado previo tras aplicar los cambios y ser rechazados.
+// y permite un retorno al estado previo tras aplicar los cambiossi el usuario los rechaza.
 
 function filterSetter() {
     if (filter.color != "" && filter.effect != "") {
@@ -534,7 +537,7 @@ function filterSetter() {
         var contexto = lienzo.getContext("2d");
         var lienzoBackup = new Image();
         lienzoBackup.src = lienzo.toDataURL();
-        contexto.globalCompositeOperation = filter.effect;
+        contexto.globalCompositeOperation = filter.effect || filter.effect.replace(/"/g, "");
         contexto.fillStyle = filter.color;
         contexto.fillRect(0, 0, lienzo.width, lienzo.height);
         contexto.globalCompositeOperation = "source-over";
@@ -564,50 +567,66 @@ function filterSetter() {
 function filterChoose() {
     filter.color = "";
     filter.effect = "";
-    var ventana = document.getElementById("dialogOptions");
-    var mainWindCont = '<h3>' + idioma.fltInf1 + '</h3><section id="listaFiltros"><input type="radio" name="filtro" id="negativo" value="negativo"><label for="negativo">' + idioma.fltNeg + '</label><hr><input type="radio" name="filtro" id="b&w" value="b&w"><label for="b&w">' + idioma.fltBaW + '</label><hr><input type="radio" name="filtro" id="taint" value="taint"><label for="taint">' + idioma.fltTaint + '</label><span><label for="taintCol">' + idioma.colorText + '</label><input type="color" id="taintCol"></span><hr><input type="radio" name="filtro" id="mart" value="mart"><label for="mart">' + idioma.fltMars + '</label><span><label for="martCol">' + idioma.colorText + '</label><input type="color" id="martCol"></span><hr><input type="radio" name="filtro" id="nighty" value="nighty"><label for="nighty">' + idioma.fltNight + '</label><hr><input type="radio" name="filtro" id="dayly" value="dayly"><label for="dayly">' + idioma.fltDay + '</label><span><label for="dayCol">' + idioma.colorText + '</label><input type="color" id="dayCol"></span></section><br><button type="button" id="filtroOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closingIcon">';
-    ventana.innerHTML = mainWindCont;
-    ventana.style.top = "30%";
-    ventana.style.display = "block";
-    document.getElementById("closingIcon").addEventListener("click", function() {
-        ventana.style.display = "none";
-    });
-    document.getElementById("filtroOk").addEventListener("click", function() {
-        var filtros = document.getElementsByName("filtro");
-        for (i = 0; i < filtros.length; i++) {
-            if (filtros[i].checked == true) {
-                var usedFilter = filtros[i].value;
+    if (navigator.userAgent.indexOf("Trident") != -1) { // Anulamos la función en Internet Explorer
+        var ventana = document.getElementById("dialogOptions");
+        var mainWindCont = '<h4>' + idioma.noIE + '</h4><br><button type="button" id="understood">' + idioma.confirmText + '</button>';
+        ventana.innerHTML = mainWindCont;
+        ventana.style.display = "block";
+        ventana.style.top = "30%";
+        ventana.style.padding = "auto 2rem";
+        var boton = document.getElementById("understood");
+        boton.style.fontSize = "1.5rem";
+        boton.style.width = "30%";
+        document.getElementById("understood").addEventListener("click", function() {
+            ventana.style.display = "none";
+        });
+    }
+    else {
+        var ventana = document.getElementById("dialogOptions");
+        var mainWindCont = '<h3>' + idioma.fltInf1 + '</h3><section id="listaFiltros"><input type="radio" name="filtro" id="negativo" value="negativo"><label for="negativo">' + idioma.fltNeg + '</label><hr><input type="radio" name="filtro" id="b&w" value="b&w"><label for="b&w">' + idioma.fltBaW + '</label><hr><input type="radio" name="filtro" id="taint" value="taint"><label for="taint">' + idioma.fltTaint + '</label><span><label for="taintCol">' + idioma.colorText + '</label><input type="color" id="taintCol"></span><hr><input type="radio" name="filtro" id="mart" value="mart"><label for="mart">' + idioma.fltMars + '</label><span><label for="martCol">' + idioma.colorText + '</label><input type="color" id="martCol"></span><hr><input type="radio" name="filtro" id="nighty" value="nighty"><label for="nighty">' + idioma.fltNight + '</label><hr><input type="radio" name="filtro" id="dayly" value="dayly"><label for="dayly">' + idioma.fltDay + '</label><span><label for="dayCol">' + idioma.colorText + '</label><input type="color" id="dayCol"></span></section><br><button type="button" id="filtroOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closingIcon">';
+        ventana.innerHTML = mainWindCont;
+        ventana.style.top = "30%";
+        ventana.style.display = "block";
+        document.getElementById("closingIcon").addEventListener("click", function() {
+            ventana.style.display = "none";
+        });
+        document.getElementById("filtroOk").addEventListener("click", function() {
+            var filtros = document.getElementsByName("filtro");
+            for (i = 0; i < filtros.length; i++) {
+                if (filtros[i].checked == true) {
+                    var usedFilter = filtros[i].value;
+                }
             }
-        }
-        switch (usedFilter) {
-            case "negativo":
-                filter.color = transparencyAdder("#ffffff", 1);
-                filter.effect = "exclusion";
-                break;
-            case "b&w":
-                filter.color = transparencyAdder("#ffffff", 1);
-                filter.effect = "hue";
-                break;
-            case "taint":
-                filter.color = transparencyAdder(document.getElementById("taintCol").value, 1);
-                filter.effect = "color";
-                break;
-            case "mart":
-                filter.color = transparencyAdder(document.getElementById("martCol").value, 1);
-                filter.effect = "color-dodge";
-                break;
-            case "nighty":
-                filter.color = transparencyAdder("#666666", 1);
-                filter.effect = "overlay";
-                break;
-            case "dayly":
-                filter.color = transparencyAdder(document.getElementById("dayCol").value, 0.4);
-                filter.effect = "lighten";
-                break;
-        }
-        filterSetter();
-        ventana.style.display = "none";
-    });
+            switch (usedFilter) {
+                case "negativo":
+                    filter.color = transparencyAdder("#ffffff", 1);
+                    filter.effect = "exclusion";
+                    break;
+                case "b&w":
+                    filter.color = transparencyAdder("#ffffff", 1);
+                    filter.effect = "hue";
+                    break;
+                case "taint":
+                    filter.color = transparencyAdder(document.getElementById("taintCol").value, 1);
+                    filter.effect = "color";
+                    break;
+                case "mart":
+                    filter.color = transparencyAdder(document.getElementById("martCol").value, 1);
+                    filter.effect = "color-dodge";
+                    break;
+                case "nighty":
+                    filter.color = transparencyAdder("#666666", 1);
+                    filter.effect = "overlay";
+                    break;
+                case "dayly":
+                    filter.color = transparencyAdder(document.getElementById("dayCol").value, 0.4);
+                    filter.effect = "lighten";
+                    break;
+            }
+            filterSetter();
+            ventana.style.display = "none";
+        });
+    }
 }
 
 // Función para la selección de vista de usuario (o trayectoria de los cohetes), lateral
@@ -706,7 +725,7 @@ function toca(sonido) {
 
 // Función para la ejecución del proposito principal (disparar los fuegos correctamente)
 // Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
-// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 713)
+// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 732)
 
 function blastRenderer(evento) {
     if (config.blaster == "random") {
@@ -719,7 +738,7 @@ function blastRenderer(evento) {
         setTimeout(function() {
             toca("explosion");
             boomVert(evento);
-        }, 500);
+        }, 400);
         return;
     }
     if (config.vista == "cenital") {
@@ -728,7 +747,7 @@ function blastRenderer(evento) {
         setTimeout(function() {
             toca("explosion");
             boomCentr(evento);
-        }, 500);
+        }, 400);
         return;
     }
 }
@@ -796,11 +815,11 @@ function firefoxButtons() {
     return;
 }
 
-// Función para dimensionar y mostrar las pseudo-ventanas de ayuda en Firefox
+// Función para dimensionar y mostrar las pseudo-ventanas de ayuda en Firefox e IE
 
 function firefoxHelp(origen, hijo) {
     var posicion = origen.getBoundingClientRect();
-    document.styleSheets[0].insertRule('#botonera button[name]:nth-child(' + hijo + '):hover:before {content: attr(name); position: absolute; font-size: .9rem; text-align: left; margin-top: -14%; left: ' + (posicion.left + 8) + 'px; width: ' + posicion.width * 0.72 + 'px; background-color: rgba(0, 0, 0, 0.6); color: white; padding: 1em 2em; border-radius: 1em; text-shadow: -1px 1px 3px black; z-index: 10; }', 0);
+    document.styleSheets[0].insertRule('#botonera button[name]:nth-child(' + hijo + '):hover:before {content: attr(name); position: absolute; font-size:' + window.innerHeight * 0.017 + 'px; text-align: left; margin-top: -23%; left: ' + (posicion.left + 4) + 'px; width: ' + posicion.width * 0.72 + 'px; background-color: rgba(0, 0, 0, 0.6); color: white; padding: 1em 2em; border-radius: 1em; text-shadow: -1px 1px 3px black; z-index: 10; white-space: pre-wrap; word-break; break-all}', 0);
     return;
 }
 
@@ -837,6 +856,7 @@ function displayHelp(origen) {
     ventana.style.top = (posicion.top - ventana.getBoundingClientRect().height - posicion.height) + "px";
     ventana.classList.remove("hiddenHelp");
     ventana.classList.add("shownHelp");
+    clearTimeout(ocultacion);
 }
 
 // Función para ocultar las ventanas de ayuda de los botones
@@ -845,10 +865,13 @@ function hideHelp() {
     var ventana = document.getElementById("dialogHelp");
     ventana.classList.remove("shownHelp");
     ventana.classList.add("hiddenHelp");
-    setTimeout(function(){
+    ocultacion = setTimeout(function(){
         ventana.style.display = "none";
     }, 1200);
 }
+
+// FUNCIONES PArA CREACION E INTERACTIVIDAD DEL ENTORNO GRAFICO DEL DOCUMENTO
+//___________________________________________________________________________
 
 // Función para la creación y gestión de la botonera inferior, tambien permite su traducción
 // instantanea sin necesidad de recargar el documento y asigna los manejadores de evento de
@@ -892,7 +915,8 @@ function btnDisplayer() {
         for (i = 0; i < helpButtons.length; i++) {
             helpButtons[i].addEventListener("click", function(e) {
                 e.stopPropagation();
-                displayHelp(this);});
+                displayHelp(this);
+            });
             helpButtons[i].addEventListener("mouseout", function() {hideHelp();});
         }
     }
@@ -919,7 +943,7 @@ function langSetter(boton) {
     }
 }
 
-// Función para la obtención del consentimiento del usuario para acceder a su contenido
+// Función para la obtención del consentimiento del usuario para acceder al contenido generado (solo Chrome y Firefox)
 
 function legalConsent() {
 
@@ -961,10 +985,10 @@ function legalConsent() {
     }
 }
 
-// Función generadora de contenidos.
-// Genera dinámicamente el canvas y sus medidas; tras comprobar que el viewport cumple
-// los requerimientos realiza la carga del canvas y le asigna medidas relativas al viewport.
-// También le asigna su estado de inicio (color y fondo).
+// Función generadora de contenidos gráficos.
+// Genera dinámicamente el canvas y sus medidas; tras comprobar que tanto navegador como viewport cumplen
+// los requerimientos necesarios, realiza la carga del canvas y le asigna medidas relativas al viewport.
+// También le asigna un estado de inicio (color y/o imagen de fondo).
 
 function contentSetter() {
     if (!!window.WebGLRenderingContext) {
