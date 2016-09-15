@@ -18,7 +18,7 @@ body {
     width: 95%;
     margin: 0 auto;
 }
-button, #dwldBtn, #understood {
+button {
     margin: 0 .1%;
     padding: 0;
     width: 14.9%;
@@ -29,14 +29,10 @@ button, #dwldBtn, #understood {
     background-color: black;
     box-shadow: none!important;
 }
-button:hover, #dwldBtn, #understood {
+button:hover {
     font-weight: bold;
     color: black;
     background-color: white;
-}
-#dwldBtn {
-    text-decoration: none;
-    padding: 0 1em;
 }
 .dialog {
     width: 30%;
@@ -197,7 +193,7 @@ button:hover, #dwldBtn, #understood {
 }
 #displayAlarm button {
     border: double 4px darkred;
-    width: 10em;
+    width: 30%;
     background-color: red;
     color: black;
     font-weight: bold;
@@ -216,8 +212,8 @@ button:hover, #dwldBtn, #understood {
     margin: -.5em 0 -.5em 1.9%;
 }
 .lngIcon:hover {
-    background-color: darkgray;
-    box-shadow: -2px -2px 3px darkgray;
+    background-color: darkgrey;
+    box-shadow: -2px -2px 3px darkgrey;
 }
 .info {
     float: right;
