@@ -96,120 +96,29 @@ var filter = {
     effect: ""
 };
 
-// Paquetes de idioma ----------------------------------------------------
+// Asignación y carga de paquetes de idioma
 
-// Español
 
-var spnsh = {
-    saveLabel1: "Nombre del archivo: ",
-    saveLabel2: "Tamaño de la imagen: ",
-    okText: "Ok",
-    waterMark: "Creado con Fireworks Generator © 2016 Pedro Pablo Gonzalo",
-    bgColLabel: "Color de fondo: ",
-    bgImgLabel: "Imagen de fondo: ",
-    bgWarn1: "Esta operación reiniciará por completo el dibujo realizado.",
-    bgWarn2: "¿Desea continuar?",
-    yesText: "Si",
-    noText: "No",
-    fltWarn1: "¿Está satisfecho con el resultado y desea mantener los cambios efectuados por el filtro?",
-    fltWarn2: "(Los cambios no podrán deshacerse más adelante)",
-    fltInf1: "Filtros disponibles",
-    fltNeg: " Invertir colores",
-    fltBaW: " Blanco y negro",
-    fltTaint: " Teñido",
-    colorText: "Color: ",
-    fltMars: " Marciano",
-    fltNight: " Nocturno",
-    fltDay: " Diurno",
-    topView: "Vista: cenital",
-    sideView: "Vista: lateral",
-    blastText: "Palmeras",
-    rdmText: "Aleatorio",
-    contWarn1: "Esta aplicación está diseñada para funcionar exclusivamente en posición horizontal. Por favor, gire su dispositivo 90º y reiníciela.",
-    contWarn2: "Esta aplicación está diseñada para funcionar exclusivamente en dispositivos con una resolución mínima de 800px de ancho. Por favor, recárgela en otro dispositivo con las características mínimas requeridas.",
-    confirmText: "Entendido",
-    fltBttnText: "Aplicar filtro",
-    bgBttnText: "Fondo",
-    clrBttnText: "Limpiar lienzo",
-    saveBttnText: "Guardar imagen",
-    blastHelp: 'Elija uno de los diseños disponibles para reproducirlo en la imagen al hacer click o seleccione "Aleatorio" para reproducir uno al azar en cada pulsación.',
-    viewHelp: 'Seleccione el origen de los cohetes; Si elije la vista cenital, los cohetes partirán del centro de la imagen. Con la vista lateral, partirán de la parte inferior.',
-    fltHelp: 'Seleccione un filtro para aplicarlo a la imagen, algunos filtros necesitan que seleccione también un color para funcionar.',
-    bgHelp: 'Seleccione una imagen o un color para el fondo de la imagen.<br>Tenga en cuenta que esta operación reiniciará por completo el trabajo que ya haya realizado en la imagen.<br>Se recomiendan imágenes con la misma relación de aspecto que su pantalla (p.ej. 16:9, 4:3, etc.)',
-    clrHelp: 'Reinicia la escena por completo, manteniendo la imagen o color que haya seleccionado para el fondo.',
-    saveHelp: 'Guarda su imagen en formato .jpg dentro de su equipo, para compartirla donde desee o emplearla en futuras sesiones de edición.<br>Podrá elegir un nombre para su fichero y un tamaño entre cuatro (se recomienda el tamaño máximo ofrecido para futuras sesiones con este software).',
-    legalWarn: 'Este programa recoge contenido generado por el usuario con fines publicitarios y de presentación.<br>Bajo ningún concepto se publicará contenido que pueda contener datos personales del usuario (caras, matrículas, etc.).<br><br>¿Desea que la aplicación recoja contenido generado por usted durante su uso?</p>',
-<<<<<<< HEAD
-    legalWarnTitle: "Importante:",
-    noCanvas: 'Su navegador actual no soporta la API WebGL.<br>Por favor, actualize los drivers de su tarjeta gráfica o instale un navegador de este siglo y recargue la aplicación.',
-    dwldText: 'Descargar',
-    noIE: 'Internet Explorer no soporta esta función.<br>Si desea disfrutar del total de funciones de esta aplicación plantéese instalar un navegador decente como Chrome o Firefox.'
-=======
-    legalWarnTitle: "Importante:"
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
+function langSettings(lang) {
+    var userLang = navigator.language || navigator.userLanguage; // Recogemos el lenguaje por defecto del navegador
+    if (((userLang.indexOf("es") != -1 || userLang == undefined) && !lang) || lang == "spnsh") {
+        var lenguaje = "idiomas/spnsh.json"; // Definimos la ruta al paquete de idioma correspondiente
+    }
+    else {
+        var lenguaje = "idiomas/nglsh.json"; // Definimos la ruta al paquete de idioma correspondiente
+    }
+    var peticion = new XMLHttpRequest(); // Definimos una petición HTTP para obtener el paquete de idioma adecuado
+    var archivo = lenguaje;
+
+    peticion.onreadystatechange = function() { // Comprobamos que la petición esté lista...
+    if (this.readyState == 4 && this.status == 200) { // Y que no haya errores en su estado...
+        idioma = JSON.parse(this.responseText); // asignamos la respuesta a una variable global tras darle formato de objeto Json
+        }
+    };
+    peticion.open("GET", archivo, false); // Abrimos la petición y empleamos 'false' para realizar una carga síncrona
+    peticion.send(); // Enviamos la petición
 }
 
-// Inglés
-
-var nglsh = {
-    saveLabel1: "File name: ",
-    saveLabel2: "Picture size: ",
-    okText: "Ok",
-    waterMark: "Powered by Fireworks Generator © 2016 Pedro Pablo Gonzalo",
-    bgColLabel: "Background color: ",
-    bgImgLabel: "Background image: ",
-    bgWarn1: "This will reset current image completely.",
-    bgWarn2: "¿Do you want to proceed?",
-    yesText: "Yes",
-    noText: "No",
-    fltWarn1: "¿Are you satisfied with results, do you want to keep changes?",
-    fltWarn2: "(Changes cannot be undone past this point)",
-    fltInf1: "Available filters",
-    fltNeg: " Reverse colors",
-    fltBaW: " Black & white",
-    fltTaint: " Tainted",
-    colorText: "Color: ",
-    fltMars: " Martian",
-    fltNight: " Nightime",
-    fltDay: " Daylight",
-    topView: "Top view",
-    sideView: "Side view",
-    blastText: "\xa0\xa0\xa0Blasts\xa0\xa0\xa0\xa0",
-    rdmText: "Random",
-    contWarn1: "This software is designed to work exclusively on landscape orientation. Please, turn your device around 90º and reload it.",
-    contWarn2: "This software is designed to work exclusively on devices with 800 pixels minimun resolution. Please, use a devide featuring minimun required specs.",
-    confirmText: "Got it!",
-    fltBttnText: "Use filter",
-    bgBttnText: "Background",
-    clrBttnText: "Reset image",
-    saveBttnText: "Save picture",
-    blastHelp: 'Choose one of the available displayed designs to apply it on screen when you click on it or select "Random" to apply one at random on each click.',
-    viewHelp: 'Choose the origin of rockets; If you pick top view, rockets depart from the center, pick side view to get them depart from the bottom of picture.',
-    fltHelp: 'Choose an optical filter to apply to the picture, some filters also require you too choose a color for proper function.',
-    bgHelp: 'Pick a picture or color to use it as your image background<br>Keep in mind that this function will completely reset any previous work on the current picture.<br>Pictures matching your screen aspect ratio are recommended (e.g. 16:9, 4:3, etc.)',
-    clrHelp: 'Completely resets your picture maintaining the image or color you chose as background.',
-    saveHelp: "Saves your work on .jpg format into your computer so you can share it or keep it for further work with this software.<br>You'll be asked to pick a file name and size amongst four (I strongly recommend the biggest available size if you plan to re-use the file again on this software).",
-    legalWarn: "This software gathers user's generated content for advertising and broadcasting pourposes.<br>On no account we'll broadcast any content containing user's personal data (like faces, car plates, etc.)<br><br>Do you want to allow this software to gather generated content during use?",
-<<<<<<< HEAD
-    legalWarnTitle: "Attention:",
-    noCanvas: "Your browser doesn´t support WebGL API.<br>Please, update your GPU drivers or install a current century browser and reload this app.",
-    dwldText: 'Download',
-    noIE: "Internet Explorer doesn't allow this function, sorry.<br>If you want to fully enjoy this software functionality, please consider installing a decent browser like Chrome or Firefox."
-=======
-    legalWarnTitle: "Attention:"
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
-}
-
-// Asignación de idioma inicial
-
-<<<<<<< HEAD
-var userLang = navigator.language || navigator.userLanguage;
-if (userLang.indexOf("es") != -1 || userLang == undefined) {
-    var idioma = spnsh;
-}
-else {
-    var idioma = nglsh;
-}
 
 // FUNCIONES DE DEFINICION DEL COMPORTAMIENTO DE LOS COHETES Y SUS ESTELAS
 //________________________________________________________________________
@@ -222,12 +131,6 @@ else {
 //if (navigator.userAgent.indexOf("Firefox") != -1) {
 //    var adjustment = 1;
 //}
-=======
-var idioma = spnsh;
-
-// COMENZAMOS CON LAS FUNCIONES QUE DEFINIRAN EL COMPORTAMIENTO DE LA APP (BOTONES DE OPCIONES)
-//______________________________________________________________________________________________
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
 
 // Funciones para definir y usar un cohete de ascenso radial (desde el centro del lienzo)
 
@@ -236,11 +139,11 @@ var idioma = spnsh;
 function estelaCentr(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
-    var radio1 = Math.sqrt(Math.pow(Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
-    var degradado1 = contexto.createRadialGradient((lienzo.width / 2), (lienzo.height / 2), 0, (evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop, radio1 * 0.1);
+    var radio1 = Math.sqrt(Math.pow(Math.abs(((evento.clientX * adjustment)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
+    var degradado1 = contexto.createRadialGradient((lienzo.width / 2), (lienzo.height / 2), 0, (evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop, radio1 * 0.1);
     contexto.beginPath();
     contexto.moveTo((lienzo.width / 2), (lienzo.height / 2));
-    contexto.lineTo((evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
+    contexto.lineTo((evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
     contexto.lineWidth = (radio1 / (lienzo.width / 2)) * 8;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
@@ -262,19 +165,19 @@ function boomCentr(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     var imagen = new Image();
-    var hptns = Math.sqrt(Math.pow(Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
-    var seno = Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)) / hptns;
+    var hptns = Math.sqrt(Math.pow(Math.abs(((evento.clientX * adjustment)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
+    var seno = Math.abs(((evento.clientX * adjustment)  -  lienzo.offsetLeft) - (lienzo.width / 2)) / hptns;
     var coseno = Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)) / hptns;
-    if ((evento.clientX * 0.99) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
+    if ((evento.clientX * adjustment) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
         var angulo = Math.asin(seno);
     }
-    if ((evento.clientX * 0.99) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
+    if ((evento.clientX * adjustment) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
         var angulo = -1 * ((Math.asin(seno) * 180 / Math.PI) + 180) * Math.PI / 180;
     }
-    if ((evento.clientX * 0.99) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
+    if ((evento.clientX * adjustment) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
         var angulo = ((Math.asin(seno) * 180 / Math.PI) + 180) * Math.PI / 180;
     }
-    if ((evento.clientX * 0.99) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
+    if ((evento.clientX * adjustment) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
         var angulo = -1 * Math.asin(seno);
     }
     imagen.src = config.set.blast;
@@ -282,7 +185,7 @@ function boomCentr(evento) {
         var anchoEscala = imagen.width * (Math.abs(hptns) / (lienzo.width / 2));
         var altoEscala = imagen.height * (Math.abs(hptns) / (lienzo.width / 2));
         contexto.save();
-        contexto.translate(((evento.clientX * 0.99) - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
+        contexto.translate(((evento.clientX * adjustment) - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
         contexto.rotate(angulo);
         contexto.drawImage(imagen, 0 - anchoEscala / 2, 0 - altoEscala / 2, anchoEscala, altoEscala);
         contexto.restore();
@@ -297,10 +200,10 @@ function estelaVert(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     var altura = evento.clientY - lienzo.offsetTop;
-    var degradado1 = contexto.createLinearGradient((evento.clientX * 0.99), lienzo.height, (evento.clientX * 0.99), evento.clientY);
+    var degradado1 = contexto.createLinearGradient((evento.clientX * adjustment), lienzo.height, (evento.clientX * adjustment), evento.clientY);
     contexto.beginPath();
-    contexto.moveTo((evento.clientX * 0.99) - lienzo.offsetLeft, lienzo.height);
-    contexto.lineTo((evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
+    contexto.moveTo((evento.clientX * adjustment) - lienzo.offsetLeft, lienzo.height);
+    contexto.lineTo((evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
     contexto.lineWidth = 1 + (altura / lienzo.height) * 5;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
@@ -328,7 +231,7 @@ function boomVert(evento) {
     imagen.onload = function() {
         var anchoEscala = imagen.width * escala;
         var altoEscala = imagen.height * escala;
-        contexto.drawImage(imagen, (((evento.clientX * 0.99) - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
+        contexto.drawImage(imagen, (((evento.clientX * adjustment) - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
     }
 }
 
@@ -381,25 +284,76 @@ function backgrColSetter() {
 // contenido guardado se almacenará tambien en el Storage de Firebase.
 
 function saveCanvas() {
-    var lienzo = document.getElementById("lienzo1");
-    var contexto = lienzo.getContext("2d");
-    var lienzoFoto = document.createElement("canvas");
-    var contextoFoto = lienzoFoto.getContext("2d");
-    var ventana = document.getElementById("dialogOptions");
-    var mainWindCont = '<label for="nombreArchivo">' + idioma.saveLabel1 + '</label><input type="text" id="nombreArchivo" placeholder="firework"><br><br><label for="dimensiones">' + idioma.saveLabel2 + '</label><select id="dimensiones"><option class="tamanos" value="1">' + parseInt(lienzo.width) + " X " + parseInt(lienzo.height) + '</option><option class="tamanos" value="2" selected>' + parseInt(lienzo.width / 2) + " X " + parseInt(lienzo.height / 2) + '</option><option class="tamanos" value="3">' + parseInt(lienzo.width / 3) + " X " + parseInt(lienzo.height / 3) + '</option><option class="tamanos" value="4">' + parseInt(lienzo.width / 4) + " X " + parseInt(lienzo.height / 4) + '</option></select><br><br><button type="button" id="saveOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closeSaver">';
-    ventana.innerHTML = mainWindCont;
-    ventana.style.top = "40%"
-    ventana.style.display = "block";
-    document.getElementById("closeSaver").addEventListener("click", function(){
-        ventana.style.display = "none";
-    });
-    document.getElementById("saveOk").addEventListener("click", function() {
-        var tama = document.getElementsByClassName("tamanos");
-        for (i = 0; i < tama.length; i++) {
-            if (tama[i].selected == true) {
-                var saveSize = tama[i].value;
+    if (navigator.userAgent.indexOf("Trident") == -1) {
+        var lienzo = document.getElementById("lienzo1");
+        var contexto = lienzo.getContext("2d");
+        var lienzoFoto = document.createElement("canvas");
+        var contextoFoto = lienzoFoto.getContext("2d");
+        var ventana = document.getElementById("dialogOptions");
+        var mainWindCont = '<label for="nombreArchivo">' + idioma.saveLabel1 + '</label><input type="text" id="nombreArchivo" placeholder="firework"><br><br><label for="dimensiones">' + idioma.saveLabel2 + '</label><select id="dimensiones"><option class="tamanos" value="1">' + parseInt(lienzo.width) + " X " + parseInt(lienzo.height) + '</option><option class="tamanos" value="2" selected>' + parseInt(lienzo.width / 2) + " X " + parseInt(lienzo.height / 2) + '</option><option class="tamanos" value="3">' + parseInt(lienzo.width / 3) + " X " + parseInt(lienzo.height / 3) + '</option><option class="tamanos" value="4">' + parseInt(lienzo.width / 4) + " X " + parseInt(lienzo.height / 4) + '</option></select><br><br><button type="button" id="saveOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closeSaver">';
+        ventana.innerHTML = mainWindCont;
+        ventana.style.top = "40%"
+        ventana.style.display = "block";
+        document.getElementById("closeSaver").addEventListener("click", function(){
+            ventana.style.display = "none";
+        });
+        document.getElementById("saveOk").addEventListener("click", function() {
+            var tama = document.getElementsByClassName("tamanos");
+            for (i = 0; i < tama.length; i++) {
+                if (tama[i].selected == true) {
+                    var saveSize = tama[i].value;
+                }
             }
-<<<<<<< HEAD
+            var fileName = document.getElementById("nombreArchivo").value;
+            lienzoFoto.width = lienzo.width / saveSize;
+            lienzoFoto.height = lienzo.height / saveSize;
+            contextoFoto.drawImage(lienzo, 0, 0, lienzoFoto.width, lienzoFoto.height);
+            contextoFoto.globalCompositeOperation = "luminosity";
+            if (saveSize < 2) {
+                contextoFoto.font = "16px Comic Sans MS";
+                var centrado = 1.1;
+            }
+            else {
+                contextoFoto.font = "12px Comic Sans MS";
+                var centrado = .8;
+            }
+            contextoFoto.shadowColor = "#000000";
+            contextoFoto.shadowOffsetX = -3;
+            contextoFoto.shadowOffsetY = 3;
+            contextoFoto.shadowBlur = 2;
+            contextoFoto.fillStyle = "#ffffff";
+            contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - ((lienzo.width / 4) * centrado), lienzoFoto.height - (16 - (saveSize * 2)));
+            contextoFoto.globalCompositeOperation = "source-over";
+            var imgToSave = new Image();
+            imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
+            var descarga = document.createElement("a");
+            descarga.href = imgToSave.src;
+            descarga.type = "image/jpeg";
+            descarga.download = fileName || "Fireworks-Generator © 2016 Pedro Pablo Gonzalo";
+            descarga.target = "_blank";
+            if (config.legalconsent == "true") { // Si el usuario ha dado consentimiento para compartir el contenido...
+                lienzoFoto.toBlob(function(blob){ // Generamos un 'blob' para enviarlo a Firebase como contenido
+                    var archivo = new Image();
+                    archivo.src = blob;
+                    archivo.type = "image/jpeg";
+                    var storageRef = firebase.storage().ref("User_pictures/" + (fileName || "Fireworks-Generator © 2016 Pedro Pablo Gonzalo") + ".jpg"); // Asocimos la referencia del storage de Firebase
+                    storageRef.put(blob); // Con 'put()' enviamos el archivo al storage de Firebase
+                });
+            }
+            if (navigator.userAgent.indexOf("Chrome") != -1) {
+                descarga.click();
+                ventana.style.display = "none";
+            }
+            else { // Work-around para Firefox
+                descarga.innerHTML = idioma.dwldText;
+                descarga.setAttribute("id", "dwldBtn");
+                descarga.download += ".jpg";
+                document.getElementById("saveOk").parentNode.appendChild(descarga);
+                document.getElementById("saveOk").parentNode.removeChild(document.getElementById("saveOk"));
+                descarga.onclick = function() {
+                    ventana.style.display = "none";
+                };
+            }
         });
     }
 
@@ -420,48 +374,6 @@ function saveCanvas() {
             ventana.style.display = "none";
         });
     }
-=======
-        }
-        var fileName = document.getElementById("nombreArchivo").value;
-        lienzoFoto.width = lienzo.width / saveSize;
-        lienzoFoto.height = lienzo.height / saveSize;
-        contextoFoto.drawImage(lienzo, 0, 0, lienzoFoto.width, lienzoFoto.height);
-        contextoFoto.globalCompositeOperation = "luminosity";
-        if (saveSize < 2) {
-            contextoFoto.font = "16px Comic Sans MS";
-            var centrado = 1.1;
-        }
-        else {
-            contextoFoto.font = "12px Comic Sans MS";
-            var centrado = .8;
-        }
-        contextoFoto.shadowColor = "#000000";
-        contextoFoto.shadowOffsetX = -3;
-        contextoFoto.shadowOffsetY = 3;
-        contextoFoto.shadowBlur = 2;
-        contextoFoto.fillStyle = "#ffffff";
-        contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - ((lienzo.width / 4) * centrado), lienzoFoto.height - (16 - (saveSize * 2)));
-        contextoFoto.globalCompositeOperation = "source-over";
-        var imgToSave = new Image();
-        imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
-        var descarga = document.createElement("a");
-        descarga.href = imgToSave.src;
-        descarga.type = "image/jpeg";
-        descarga.download = fileName || "Fireworks-Generator © 2016 Pedro Pablo Gonzalo";
-        descarga.target = "_blank";
-        descarga.click();
-        if (config.legalconsent == "true") { // Si el usuario ha dado consentimiento para compartir el contenido...
-            lienzoFoto.toBlob(function(blob){ // Generamos un 'blob' para enviarlo a Firebase como contenido
-                var archivo = new Image();
-                archivo.src = blob;
-                archivo.type = "image/jpeg";
-                var storageRef = firebase.storage().ref("User_pictures/" + fileName + ".jpg"); // Asocimos la referencia del storage de Firebase
-                storageRef.put(blob); // Con 'put()' enviamos el archivo al storage de Firebase
-            });
-        }
-        ventana.style.display = "none";
-    });
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
 }
 
 // Función para la selección de fondo, permite tanto elegir imágenes del equipo usuario
@@ -621,7 +533,7 @@ function filterChoose() {
                     filter.effect = "color-dodge";
                     break;
                 case "nighty":
-                    filter.color = transparencyAdder("#666666", 1);
+                    filter.color = transparencyAdder("#444444", 1);
                     filter.effect = "overlay";
                     break;
                 case "dayly":
@@ -639,16 +551,31 @@ function filterChoose() {
 // o cenital (vertical o central si se prefiere...)
 
 function viewSelect(){
-    var botonText = document.getElementById("viewpoint");
-    if (config.vista == "lateral" && botonText.innerHTML == idioma.topView + '<span class="info">?</span>') {
-        config.vista = "cenital";
-        botonText.innerHTML = idioma.sideView + '<span class="info">?</span>';
-        return;
+    if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
+        var botonText = document.getElementById("viewpoint");
+        if (config.vista == "lateral" && botonText.innerHTML == idioma.topView) {
+            config.vista = "cenital";
+            botonText.innerHTML = idioma.sideView;
+            return;
+        }
+        if (config.vista == "cenital" && botonText.innerHTML == idioma.sideView) {
+            config.vista = "lateral";
+            botonText.innerHTML = idioma.topView;
+            return;
+        }
     }
-    if (config.vista == "cenital" && botonText.innerHTML == idioma.sideView + '<span class="info">?</span>') {
-        config.vista = "lateral";
-        botonText.innerHTML = idioma.topView + '<span class="info">?</span>';
-        return;
+    else {
+        var botonText = document.getElementById("viewpoint");
+        if (config.vista == "lateral" && botonText.innerHTML == idioma.topView + '<span class="info">?</span>') {
+            config.vista = "cenital";
+            botonText.innerHTML = idioma.sideView + '<span class="info">?</span>';
+            return;
+        }
+        if (config.vista == "cenital" && botonText.innerHTML == idioma.sideView + '<span class="info">?</span>') {
+            config.vista = "lateral";
+            botonText.innerHTML = idioma.topView + '<span class="info">?</span>';
+            return;
+        }
     }
 }
 
@@ -702,7 +629,7 @@ var sonidos = { // Esta es la lista de sonidos prefijados que usaremos
 }
 function toca(sonido) {
     var indice, numerador;
-    numerador = new Date(); // Usamos un objeto date para obtener numeradores correlativos
+    numerador = new Date(); // Usamos un objeto Date para obtener numeradores correlativos
     indice = sonido + numerador.getTime(); // y generamos un indice correlativo en cola de reproducción
     lista[indice] = new Audio(sonidos[sonido]); // Generamos un nuevo sonido en cola de reproduccion con el sonido solicitado a la función.
     lista[indice].onended = function () {
@@ -711,16 +638,12 @@ function toca(sonido) {
     lista[indice].play(); // A continuación lo reproducimos.
 }
 
-// FUNCIONES PARA EL PROPIO FUNCIONAMIENTO DE LA APP
-//___________________________________________________
+// FUNCIONES PARA EL PROPIO FUNCIONAMIENTO  INTERNO DE LA APP
+//___________________________________________________________
 
 // Función para la ejecución del proposito principal (disparar los fuegos correctamente)
 // Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
-<<<<<<< HEAD
 // funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 732)
-=======
-// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 613)
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
 
 function blastRenderer(evento) {
     if (config.blaster == "random") {
@@ -747,13 +670,12 @@ function blastRenderer(evento) {
     }
 }
 
-<<<<<<< HEAD
-// Función para emplear el atributo name de los botones como texto de la ventana de ayuda en Firefox
-// e Internet Explorer
+// Función para emplear evento mouseover de los botones como disparador de la ventana
+// de ayuda en Firefox e Internet Explorer en vez de generar 'sub-botones' como en Chrome.
 
 function firefoxButtons() {
 
-    // Eliminamos los botones de ayuda ya que usaremos el evento 'onmouseover'
+    // Eliminamos los botones de ayuda (o sub-botones) ya que usaremos el evento 'onmouseover' del propio botón de la función.
 
     var spans = document.getElementsByTagName("span");
     var spanlist = spans.length;
@@ -766,67 +688,32 @@ function firefoxButtons() {
         }
     };
 
-    // Generamos el atributo name y su contenido y el evento 'onmouseover' de los botones
+    // Añadimos eventos 'mouseover' y 'mouseout' para los botones de Firefox / IE.
 
     var botones = document.getElementsByTagName("button");
     for (i = 0; i < botones.length; i++) {
-        switch (botones[i].getAttribute("id")) {
-        case "blasts":
-            botones[i].setAttribute("name", idioma.blastHelp.replace(/<br>/g, "\r"));
-            botones[i].addEventListener("mouseover", function() {
-                firefoxHelp(this, 1);
-            });
-            break;
-        case "viewpoint":
-            botones[i].setAttribute("name", idioma.viewHelp.replace(/<br>/g, "\r"));
-            botones[i].addEventListener("mouseover", function() {
-                firefoxHelp(this, 2);
-            });
-            break;
-        case "filtro":
-            botones[i].setAttribute("name", idioma.fltHelp.replace(/<br>/g, "\r"));
-            botones[i].addEventListener("mouseover", function() {
-                firefoxHelp(this, 3);
-            });
-            break;
-        case "background":
-            botones[i].setAttribute("name", idioma.bgHelp.replace(/<br>/g, "\r"));
-            botones[i].addEventListener("mouseover", function() {
-                firefoxHelp(this, 4);
-            });
-            break;
-        case "clear":
-            botones[i].setAttribute("name", idioma.clrHelp.replace(/<br>/g, "\r"));
-            botones[i].addEventListener("mouseover", function() {
-                firefoxHelp(this, 5);
-            });
-            break;
-        case "save":
-            botones[i].setAttribute("name", idioma.saveHelp.replace(/<br>/g, "\r"));
-            botones[i].addEventListener("mouseover", function() {
-                firefoxHelp(this, 6);
-            });
-        }
+        botones[i].addEventListener("mouseover", function() {
+            displayHelp(this);
+        });
+        botones[i].addEventListener("mouseout", function() {
+            hideHelp();
+        })
     }
     return;
 }
 
-// Función para dimensionar y mostrar las pseudo-ventanas de ayuda en Firefox e IE
-
-function firefoxHelp(origen, hijo) {
-    var posicion = origen.getBoundingClientRect();
-    document.styleSheets[0].insertRule('#botonera button[name]:nth-child(' + hijo + '):hover:before {content: attr(name); position: absolute; font-size:' + window.innerHeight * 0.017 + 'px; text-align: left; margin-top: -23%; left: ' + (posicion.left + 4) + 'px; width: ' + posicion.width * 0.72 + 'px; background-color: rgba(0, 0, 0, 0.6); color: white; padding: 1em 2em; border-radius: 1em; text-shadow: -1px 1px 3px black; z-index: 10; white-space: pre-wrap; word-break; break-all}', 0);
-    return;
-}
-
-=======
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
 // Función para generar y mostrar las ventanas de ayuda de cada botón
 
 function displayHelp(origen) {
     var ventana = document.getElementById("dialogHelp");
-    var parentId = origen.parentElement.getAttribute("id");
-    var posicion = origen.parentElement.getBoundingClientRect();
+    if (navigator.userAgent.indexOf("Chrome") != -1) {
+        var parentId = origen.parentElement.getAttribute("id");
+        var posicion = origen.parentElement.getBoundingClientRect();
+    }
+    else {
+        var parentId = origen.getAttribute("id");
+        var posicion = origen.getBoundingClientRect();
+    }
     switch (parentId) {
         case "blasts":
             var mainWindCont = '<p>' + idioma.blastHelp + '</p>';
@@ -853,8 +740,8 @@ function displayHelp(origen) {
     ventana.style.width = (posicion.width * 0.72) + "px";
     ventana.style.top = (posicion.top - ventana.getBoundingClientRect().height - posicion.height) + "px";
     ventana.classList.remove("hiddenHelp");
-    ventana.classList.add("shownHelp");
     clearTimeout(ocultacion);
+    ventana.classList.add("shownHelp");
 }
 
 // Función para ocultar las ventanas de ayuda de los botones
@@ -868,11 +755,12 @@ function hideHelp() {
     }, 1200);
 }
 
-// FUNCIONES PArA CREACION E INTERACTIVIDAD DEL ENTORNO GRAFICO DEL DOCUMENTO
+// FUNCIONES PARA CREACION E INTERACTIVIDAD DEL ENTORNO GRAFICO DEL DOCUMENTO
 //___________________________________________________________________________
 
 // Función para la creación y gestión de la botonera inferior, tambien permite su traducción
-// instantanea sin necesidad de recargar el documento y asigna los manejadores de evento de los botones.
+// instantanea sin necesidad de recargar el documento y asigna los manejadores de evento de
+// los botones y botones de ayuda.
 
 function btnDisplayer() {
     if (document.body.lastChild.getAttribute("id") != "lienzo1" || !document.body.lastChild.getAttribute("id")) {
@@ -882,12 +770,18 @@ function btnDisplayer() {
         cuerpo.removeChild(cuerpo.childNodes[cuantos - 1]);
     }
     var botonera = document.createElement('div');
-    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + idioma.topView + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside>';
+    if (config.vista == "lateral") {
+        var vistaActual = idioma.topView;
+    }
+    else {
+        var vistaActual = idioma.sideView;
+    }
+    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + vistaActual + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside>';
     document.body.appendChild(botonera);
-    if (idioma == spnsh) {
+    if (idioma.yesText == "Si") {
         document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
     }
-    if (idioma == nglsh) {
+    if (idioma.yesText == "Yes") {
         document.getElementById("ukFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
     }
 
@@ -901,7 +795,6 @@ function btnDisplayer() {
     document.getElementById("blasts").addEventListener("click", function(){blastSetter();});
     document.getElementById("spFlag").addEventListener("click", function(){langSetter(this);});
     document.getElementById("ukFlag").addEventListener("click", function(){langSetter(this);});
-<<<<<<< HEAD
 
     // Manejadores de evento para los botones de ayuda en Chrome
 
@@ -917,15 +810,12 @@ function btnDisplayer() {
             });
             helpButtons[i].addEventListener("mouseout", function() {hideHelp();});
         }
-=======
-    var helpButtons = document.getElementsByClassName("info");
-    for (i = 0; i < helpButtons.length; i++) {
-        helpButtons[i].addEventListener("click", function(e) {
-            e.stopPropagation();
-            displayHelp(this);});
-        helpButtons[i].addEventListener("mouseout", function() {hideHelp();});
->>>>>>> parent of c19f33d... Several tweaking for cross browser support on IE and Firefox
     }
+
+
+    // Evitamos que se abra el menu contextual para obligar la descarga mediante el boton de función al efecto.
+
+    document.body.oncontextmenu = function() {return false;};
 }
 
 // Función para la selección de idiomas
@@ -933,12 +823,12 @@ function btnDisplayer() {
 function langSetter(boton) {
     var btnId = boton.getAttribute("id");
     if (btnId == "spFlag") {
-        idioma = spnsh;
+        langSettings("spnsh");
         btnDisplayer();
         return;
     }
     if (btnId == "ukFlag") {
-        idioma = nglsh;
+        langSettings("nglsh");
         btnDisplayer();
         return;
     }
@@ -947,38 +837,43 @@ function langSetter(boton) {
 // Función para la obtención del consentimiento del usuario para acceder al contenido generado (solo Chrome y Firefox)
 
 function legalConsent() {
-    if (config.legalconsent == "") {
-        var repeticion = setTimeout(function() {
-            legalConsent();
-        }, 180000);
-    }
-    var displayLegal = document.getElementById("legalWarning");
-    var mainWindCont = '<h1>' + idioma.legalWarnTitle + '</h1><h3>' + idioma.legalWarn + '</h3><br><button type="button" id="confirmLegal">' + idioma.yesText + '</button><button type="button" id="denyLegal">' + idioma.noText + '</button>';
-    displayLegal.innerHTML = mainWindCont;
-    displayLegal.style.display = "block";
-    displayLegal.classList.remove("hiddenHelp");
-    displayLegal.classList.add("shownHelp");
-    document.getElementById("confirmLegal").addEventListener("click", function() {
-        config.legalconsent = "true";
-        displayLegal.classList.remove("showHelp");
-        displayLegal.classList.add("hiddenHelp");
-        clearTimeout(repeticion);
-        displayLegal.style.display = "none";
-    });
-    document.getElementById("denyLegal").addEventListener("click", function() {
-        config.legalconsent = "false";
-        displayLegal.classList.remove("showHelp");
-        displayLegal.classList.add("hiddenHelp");
-        clearTimeout(repeticion);
-        displayLegal.style.display = "none";
-    });
-    setTimeout(function() {
-        displayLegal.classList.remove("showHelp");
-        displayLegal.classList.add("hiddenHelp");
-        setTimeout(function() {
+
+    // El aviso se elimina en IE ya que no permite subir imágenes a Firebase Storage
+
+    if (navigator.userAgent.indexOf("Trident") == -1) {
+        if (config.legalconsent == "") {
+            var repeticion = setTimeout(function() {
+                legalConsent();
+            }, 180000);
+        }
+        var displayLegal = document.getElementById("legalWarning");
+        var mainWindCont = '<h1>' + idioma.legalWarnTitle + '</h1><h3>' + idioma.legalWarn + '</h3><br><button type="button" id="confirmLegal">' + idioma.yesText + '</button><button type="button" id="denyLegal">' + idioma.noText + '</button>';
+        displayLegal.innerHTML = mainWindCont;
+        displayLegal.style.display = "block";
+        displayLegal.classList.remove("hiddenHelp");
+        displayLegal.classList.add("shownHelp");
+        document.getElementById("confirmLegal").addEventListener("click", function() {
+            config.legalconsent = "true";
+            displayLegal.classList.remove("showHelp");
+            displayLegal.classList.add("hiddenHelp");
+            clearTimeout(repeticion);
             displayLegal.style.display = "none";
-        }, 1200);
-    }, 30000);
+        });
+        document.getElementById("denyLegal").addEventListener("click", function() {
+            config.legalconsent = "false";
+            displayLegal.classList.remove("showHelp");
+            displayLegal.classList.add("hiddenHelp");
+            clearTimeout(repeticion);
+            displayLegal.style.display = "none";
+        });
+        setTimeout(function() {
+            displayLegal.classList.remove("showHelp");
+            displayLegal.classList.add("hiddenHelp");
+            setTimeout(function() {
+                displayLegal.style.display = "none";
+            }, 1200);
+        }, 30000);
+    }
 }
 
 // Función generadora de contenidos gráficos.
@@ -987,27 +882,37 @@ function legalConsent() {
 // También le asigna un estado de inicio (color y/o imagen de fondo).
 
 function contentSetter() {
-    if (window.innerWidth < window.innerHeight) {
-        var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn1 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
+    langSettings();
+    if (!!window.WebGLRenderingContext) {
+        if (window.innerWidth < window.innerHeight) {
+            var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn1 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
+            document.body.innerHTML = displayAlarm;
+            document.getElementById("resetter").addEventListener("click", function() {
+                window.history.back();
+            });
+        }
+        else {
+            if (window.innerWidth < 800) {
+                var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn2 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
+                document.body.innerHTML = displayAlarm;
+                document.getElementById("resetter").addEventListener("click", function() {
+                window.history.back();
+                });
+            }
+            else {
+                document.body.innerHTML = '<canvas id="lienzo1" width="' + window.innerWidth * .9375 + '" height="' + window.innerHeight * .94 + '" onclick="blastRenderer(event)"></canvas>';
+                btnDisplayer();
+                backgrColSetter();
+                backgrImgSetter();
+                legalConsent();
+            }
+        }
+    }
+    else {
+        var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.noCanvas + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
         document.body.innerHTML = displayAlarm;
         document.getElementById("resetter").addEventListener("click", function() {
             window.history.back();
         });
-    }
-    else {
-        if (window.innerWidth < 800) {
-            var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn2 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
-            document.body.innerHTML = displayAlarm;
-            document.getElementById("resetter").addEventListener("click", function() {
-            window.history.back();
-            });
-        }
-        else {
-            document.body.innerHTML = '<canvas id="lienzo1" width="' + window.innerWidth * .9375 + '" height="' + window.innerHeight * .94 + '" onclick="blastRenderer(event)"></canvas>';
-            btnDisplayer();
-            backgrColSetter();
-            backgrImgSetter();
-            legalConsent();
-        }
     }
 }
