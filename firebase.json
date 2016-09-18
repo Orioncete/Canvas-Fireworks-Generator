@@ -5,11 +5,27 @@
   "hosting": {
     "firebase": "fireworks-generator",
     "public": "",
+    "headers": [{
+        "source": "**",
+        "headers": [{
+            "key": "Access-Control-Allow-Origin",
+            "value": "**"
+        }]
+    }],
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
       }
     ]
+  },
+  "storage": {
+    "headers": [{
+        "source": "**",
+        "headers": [{
+            "key": "Access-Control-Allow-Origin",
+            "value": "**"
+        }]
+    }]
   }
 }
