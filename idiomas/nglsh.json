@@ -21,7 +21,7 @@
     "fltDay": " Daylight",
     "topView": "Top view",
     "sideView": "Side view",
-    "blastText": "Choose Blast",
+    "blastText": "Pick Blast",
     "rdmText": "Random",
     "contWarn1": "This software is designed to work exclusively on landscape orientation. Please, turn your device around 90º and reload it.",
     "contWarn2": "This software is designed to work exclusively on devices with 800 pixels minimun resolution. Please, use a devide featuring minimun required specs.",
@@ -40,5 +40,7 @@
     "legalWarnTitle": "Attention:",
     "noCanvas": "Your browser doesn't support WebGL API.<br>Please, update your GPU drivers or install a current century browser and reload this app.",
     "dwldText": "Download",
-    "noIE": "Internet Explorer doesn't allow this function, sorry.<br>If you want to fully enjoy this software functionality, please consider installing a decent browser like Chrome or Firefox."
+    "noIE": "Internet Explorer doesn't allow this function, sorry.<br>If you want to fully enjoy this software functionality, please consider installing a decent browser like Chrome or Firefox.",
+    "bgDwnlHeader": "Pick a background to download",
+    "dwnlBtn": "Download backgrounds"
 }

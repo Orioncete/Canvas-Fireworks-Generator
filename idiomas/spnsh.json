@@ -40,5 +40,7 @@
     "legalWarnTitle": "Importante:",
     "noCanvas": "Su navegador actual no soporta la API WebGL.<br>Por favor, actualize los drivers de su tarjeta gráfica o instale un navegador de este siglo y recargue la aplicación.",
     "dwldText": "Descargar",
-    "noIE": "Internet Explorer no soporta esta función.<br>Si desea disfrutar del total de funciones de esta aplicación plantéese instalar un navegador decente como Chrome o Firefox."
+    "noIE": "Internet Explorer no soporta esta función.<br>Si desea disfrutar del total de funciones de esta aplicación plantéese instalar un navegador decente como Chrome o Firefox.",
+    "bgDwnlHeader": "Elija una imagen para descargar",
+    "dwnlBtn": "Descargar fondos"
 }
