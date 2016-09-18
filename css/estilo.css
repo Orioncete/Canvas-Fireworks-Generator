@@ -244,6 +244,7 @@ button:hover, #dwldBtn, #understood {
     color: black;
     text-align: center;
     text-shadow: -1px 1px 2px white;
+    z-index: 20;
 }
 #legalWarning button {
     width: 7%;
@@ -260,6 +261,52 @@ button:hover, #dwldBtn, #understood {
     color: black;
     background-color: red;
     border: solid 2px red;
+}
+#customBg {
+    width: 50%;
+    font-size: 1em;
+    border: solid 1px white;
+    margin-top: 1.2em;
+}
+#dialogBgs {
+    padding: 3em 0 3em;
+    margin: 0;
+    width: 70%;
+    left: 15%;
+    top: 4%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+#dialogBgs h2 {
+	font-size: 2em;
+    width: 50%;
+    margin: 0 calc(25% - 5px) .5em;
+    padding: .3em 0;
+    background-color: white;
+    color: black;
+    border: double 5px rgba(0, 0, 0, 0.5);
+    border-radius: .3em;
+}
+.thumbCont {
+    background-color: transparent;
+    display: inline-block;
+    border: 0;
+    width: 19%;
+    margin: .5em 0.8em;
+    padding: 0.4em 0 0.2em;
+    border-radius: .3em;
+}
+.thumbCont:hover {
+	background-color: white;
+}
+.thumbItem:hover {
+	box-shadow: -3px 3px 5px black;
+}
+.thumbItem {
+    display: inline-block;
+    width: 90%;
+    border-radius: .3em;
+    margin: 0;
+    padding: 0;
 }
 
 /* Media Queries para tamaños inferiores al recomendado */

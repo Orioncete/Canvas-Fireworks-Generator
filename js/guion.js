@@ -258,6 +258,7 @@ function backgrImgSetter() {
         contexto.globalCompositeOperation = "destination-over";
         var fondoLienzo = new Image();
         fondoLienzo.src = config.fondo;
+        fondoLienzo.crossOrigin = "https://fireworks-generator.firebaseapp.com/";
         fondoLienzo.onload = function() {
             contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
         };
@@ -383,12 +384,15 @@ function saveCanvas() {
 function backgroundSelector() {
     var ventana = document.getElementById("dialogOptions");
     var confirmacion = document.getElementById("dialogConfirm");
-    var mainWindCont = '<label for="colorin">' + idioma.bgColLabel + '</label><input id="colorin" name="colorin" type="color"><br><br><label for="fotico">' + idioma.bgImgLabel + '</label><input id="fotico" name="fotico" type="file" accept="image/*"><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
+    var mainWindCont = '<label for="colorin">' + idioma.bgColLabel + '</label><input id="colorin" name="colorin" type="color"><br><br><label for="fotico">' + idioma.bgImgLabel + '</label><input id="fotico" name="fotico" type="file" accept="image/*"><br><button type="button" id="customBg">' + idioma.dwnlBtn + '</button><br><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
     ventana.innerHTML = mainWindCont;
     ventana.style.top = "40%"
     ventana.style.display = "block";
     document.getElementById("closeIcon").addEventListener("click", function() {
         ventana.style.display = "none";
+    });
+    document.getElementById("customBg").addEventListener("click", function() {
+        bgDownloader();
     });
     document.getElementById("fotico").addEventListener("change", function() {
         var mainWindCont = '<h3>Advertencia:</h3><p>' + idioma.bgWarn1 + '</p><h3>' + idioma.bgWarn2 + '</h3><br><section id="snBtns"><button type="button" id="confirm" class="choiceBtn">' + idioma.yesText + '</button><button type="button" id="deny" class="choiceBtn">' + idioma.noText + '</button></section>';
@@ -431,6 +435,67 @@ function backgroundSelector() {
     });
 }
 
+// Función para la presentación y descarga de imágenes de fondo desde Firebase Storage
+
+var bgList = new Array;
+
+function bgDownloader() {
+    // Primero obtenemos una lista de las imágenes disponibles desde Firebase Database
+
+    var baseDeDatos = firebase.database(); // Seleccionamos la base de datos de Firebase...
+    if(baseDeDatos.ref("bgList").orderByValue()) {
+        baseDeDatos.ref("bgList").on("value", function(snapshot) {
+            if (snapshot.val() != null)  {
+                bgList = snapshot.val();
+            }
+        }, customBgWindow());
+    }
+}
+
+function customBgWindow() {
+    var repetir;
+    if (bgList && bgList != undefined && bgList.length != 0) {
+        var ventana = document.getElementById("dialogBgs");
+        var confirmacion = document.getElementById("dialogConfirm");
+        var mainWindCont = "<h2>" + idioma.bgDwnlHeader + "</h2><br>";
+        for (i = 0; i < bgList.length; i++) {
+            mainWindCont += '<button type="button" class="thumbCont" name=' + bgList[i].url + '><img class="thumbItem" src=' + bgList[i].thumb + '></button>';
+        }
+        document.getElementById("dialogOptions").style.display = "none";
+        ventana.innerHTML = mainWindCont;
+        ventana.style.display = "block";
+        var thumbNails = document.getElementsByClassName("thumbCont");
+        for (i = 0; i < thumbNails.length; i++) {
+            thumbNails[i].addEventListener("click", function() {
+                var newBg = this.name;
+                var mainWindCont = '<h3>Advertencia:</h3><p>' + idioma.bgWarn1 + '</p><h3>' + idioma.bgWarn2 + '</h3><br><section id="snBtns"><button type="button" id="confirm" class="choiceBtn">' + idioma.yesText + '</button><button type="button" id="deny" class="choiceBtn">' + idioma.noText + '</button></section>';
+                confirmacion.innerHTML = mainWindCont;
+                confirmacion.style.top = "40%";
+                confirmacion.style.zIndex = 21;
+                confirmacion.style.display = "block";
+                document.getElementById("confirm").addEventListener("click", function(){
+                    config.fondo = newBg;
+                    backgrImgSetter();
+                    confirmacion.style.zIndex = 2;
+                    confirmacion.style.display = "none";
+                    ventana.style.display = "none";
+                });
+                document.getElementById("deny").addEventListener("click", function(){
+                    confirmacion.style.zIndex = 2;
+                    confirmacion.style.display = "none";
+                    ventana.style.display = "none";
+                });
+            });
+        }
+    clearTimeout(repetir);
+    }
+    else {
+        setTimeout(function() {
+            repetir = customBgWindow();
+        }, 300);
+    }
+}
+
 // Función auxiliar para la aplicación de tranparencia a los colores necesarios mediante la conversión
 // de notacion RGB hexadecimar a RGBA decimal. Se le suministran como argumentos el color
 // en notación hexadecimal y el valor de transparencia. P.ej. -> "transparencyAdder('#f3d2a0', 0.7);"
@@ -454,7 +519,8 @@ function filterSetter() {
         var lienzo = document.getElementById("lienzo1");
         var contexto = lienzo.getContext("2d");
         var lienzoBackup = new Image();
-        lienzoBackup.src = lienzo.toDataURL();
+        lienzoBackup.crossOrigin = "http://localhost/Fireworks/";
+        lienzoBackup.src = lienzo.toDataURL("image/jpeg");
         contexto.globalCompositeOperation = filter.effect || filter.effect.replace(/"/g, "");
         contexto.fillStyle = filter.color;
         contexto.fillRect(0, 0, lienzo.width, lienzo.height);
@@ -776,7 +842,7 @@ function btnDisplayer() {
     else {
         var vistaActual = idioma.sideView;
     }
-    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + vistaActual + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside>';
+    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + vistaActual + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside><aside class="dialog" id="dialogBgs"></aside>';
     document.body.appendChild(botonera);
     if (idioma.yesText == "Si") {
         document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
