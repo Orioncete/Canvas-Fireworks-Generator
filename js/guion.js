@@ -88,6 +88,8 @@ var config = {
     vista: "lateral",
     blaster: "manual",
     set: fwSets[3],
+    trail: "on",
+    resizer: 1,
     legalconsent: ""
 };
 
@@ -144,7 +146,7 @@ function estelaCentr(evento) {
     contexto.beginPath();
     contexto.moveTo((lienzo.width / 2), (lienzo.height / 2));
     contexto.lineTo((evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
-    contexto.lineWidth = (radio1 / (lienzo.width / 2)) * 8;
+    contexto.lineWidth = ((radio1 / (lienzo.width / 2)) * 8) * config.resizer;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
     degradado1.addColorStop(0.6, config.set.estela2);
@@ -182,8 +184,8 @@ function boomCentr(evento) {
     }
     imagen.src = config.set.blast;
     imagen.onload = function() {
-        var anchoEscala = imagen.width * (Math.abs(hptns) / (lienzo.width / 2));
-        var altoEscala = imagen.height * (Math.abs(hptns) / (lienzo.width / 2));
+        var anchoEscala = imagen.width * (Math.abs(hptns) / (lienzo.width / 2)) * config.resizer;
+        var altoEscala = imagen.height * (Math.abs(hptns) / (lienzo.width / 2)) * config.resizer;
         contexto.save();
         contexto.translate(((evento.clientX * adjustment) - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
         contexto.rotate(angulo);
@@ -204,7 +206,7 @@ function estelaVert(evento) {
     contexto.beginPath();
     contexto.moveTo((evento.clientX * adjustment) - lienzo.offsetLeft, lienzo.height);
     contexto.lineTo((evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
-    contexto.lineWidth = 1 + (altura / lienzo.height) * 5;
+    contexto.lineWidth = (1 + (altura / lienzo.height) * 5) * config.resizer;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
     degradado1.addColorStop(0.6, config.set.estela2);
@@ -227,7 +229,7 @@ function boomVert(evento) {
     var altura = lienzo.height - evento.clientY - lienzo.offsetTop;
     var imagen = new Image();
     imagen.src = config.set.blast;
-    var escala = ((altura * 3) + lienzo.height) / (lienzo.height * 4);
+    var escala = ((altura * 3) + lienzo.height) / (lienzo.height * 4) * config.resizer;
     imagen.onload = function() {
         var anchoEscala = imagen.width * escala;
         var altoEscala = imagen.height * escala;
@@ -435,7 +437,10 @@ function backgroundSelector() {
     });
 }
 
-// Función para la presentación y descarga de imágenes de fondo desde Firebase Storage
+// Funciónes para la presentación y descarga de imágenes de fondo desde Firebase Storage
+// _____________________________________________________________________________________
+
+// Función que recoge el objeto de los fondos disponibles desde Firebase Database
 
 var bgList = new Array;
 
@@ -452,16 +457,20 @@ function bgDownloader() {
     }
 }
 
+// Función para generar la ventana de selección fondos disponibles para descarga.
+// También incluye una ventana de confirmación de cambios y los manejadores de evento necesarios
+
 function customBgWindow() {
     var repetir;
     if (bgList && bgList != undefined && bgList.length != 0) {
         var ventana = document.getElementById("dialogBgs");
         var confirmacion = document.getElementById("dialogConfirm");
-        var mainWindCont = "<h2>" + idioma.bgDwnlHeader + "</h2><br>";
+        var mainWindCont = "<h2 id='bgPlaceholder'>" + idioma.bgDwnlHeader + "</h2><br>";
         for (i = 0; i < bgList.length; i++) {
-            mainWindCont += '<button type="button" class="thumbCont" name=' + bgList[i].url + '><img class="thumbItem" src=' + bgList[i].thumb + '></button>';
+            mainWindCont += '<button type="button" class="thumbCont" name=' + bgList[i].url + '><img class="thumbItem" name="' + bgList[i].name.replace("-min.jpg", "").charAt(0).toUpperCase() + bgList[i].name.replace("-min.jpg", "").slice(1) + '" src=' + bgList[i].thumb + '></button>';
         }
         document.getElementById("dialogOptions").style.display = "none";
+        mainWindCont += '<img src="imagenes/iconos/white_closer-min.png" id="bgClosingIcon">'
         ventana.innerHTML = mainWindCont;
         ventana.style.display = "block";
         var thumbNails = document.getElementsByClassName("thumbCont");
@@ -486,7 +495,16 @@ function customBgWindow() {
                     ventana.style.display = "none";
                 });
             });
+            thumbNails[i].addEventListener("mouseover", function() {
+                document.getElementById("bgPlaceholder").innerHTML = this.children[0].name;
+                this.addEventListener("mouseout", function() {
+                    document.getElementById("bgPlaceholder").innerHTML = idioma.bgDwnlHeader;
+                });
+            });
         }
+        document.getElementById("bgClosingIcon").addEventListener("click", function() {
+            ventana.style.display = "none";
+        })
     clearTimeout(repetir);
     }
     else {
@@ -613,8 +631,8 @@ function filterChoose() {
     }
 }
 
-// Función para la selección de vista de usuario (o trayectoria de los cohetes), lateral
-// o cenital (vertical o central si se prefiere...)
+// Función para la selección de vista de usuario (o trayectoria de los cohetes),
+// lateral o cenital (vertical o central si se prefiere...)
 
 function viewSelect(){
     if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
@@ -718,7 +736,9 @@ function blastRenderer(evento) {
     }
     if (config.vista == "lateral") {
         toca("subida");
-        estelaVert(evento);
+        if (config.trail == "on") {
+            estelaVert(evento);
+        }
         setTimeout(function() {
             toca("explosion");
             boomVert(evento);
@@ -727,7 +747,9 @@ function blastRenderer(evento) {
     }
     if (config.vista == "cenital") {
         toca("subida");
-        estelaCentr(evento);
+        if (config.trail == "on") {
+            estelaCentr(evento);
+        }
         setTimeout(function() {
             toca("explosion");
             boomCentr(evento);
@@ -821,6 +843,52 @@ function hideHelp() {
     }, 1200);
 }
 
+// Función para la creación de la ventana de avisos de eventos del mouse
+
+function noticeDialog(content) {
+    var aviso = document.getElementById("noticeDialog");
+    aviso.style.display = "none";
+    var avisoOff;
+    clearTimeout(avisoOff);
+    aviso.innerHTML = content;
+    aviso.style.display = "block";
+    avisoOff = setTimeout(function() {
+        aviso.style.display = "none";
+    }, 1000);;
+}
+
+// Función para desactivar las estelas de los cohetes con el click derecho del ratón
+
+function estelaOnOff(evento) {
+    evento.preventDefault();
+    if (config.trail == "on") {
+        config.trail = "off";
+        noticeDialog(idioma.trailOffText);
+        return false;
+    }
+    else {
+        config.trail = "on";
+        noticeDialog(idioma.trailOnText);
+        return false;
+    }
+}
+
+// Función para cambiar el tamaño de las palmeras con la rueda de scroll del ratón
+
+function blastResizer(evento) {
+    evento.preventDefault();
+    var e = window.event || evento;
+    var incremento = Math.round(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
+    config.resizer += incremento * 0.05;
+    if (config.resizer >= 1) {
+        config.resizer = 1;
+    }
+    if (config.resizer <= 0.5) {
+        config.resizer = 0.5;
+    }
+    noticeDialog(idioma.sizeText + Math.round(config.resizer * 100) + "%");
+}
+
 // FUNCIONES PARA CREACION E INTERACTIVIDAD DEL ENTORNO GRAFICO DEL DOCUMENTO
 //___________________________________________________________________________
 
@@ -842,7 +910,7 @@ function btnDisplayer() {
     else {
         var vistaActual = idioma.sideView;
     }
-    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + vistaActual + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside><aside class="dialog" id="dialogBgs"></aside>';
+    botonera.innerHTML = '<section id="botonera"><button type="button" id="blasts">' + idioma.blastText + '<span class="info">?</span></button><button type="button" id="viewpoint">' + vistaActual + '<span class="info">?</span></button><button type="button" id="filtro">' + idioma.fltBttnText + '<span class="info">?</span></button><button type="button" id="background">' + idioma.bgBttnText + '<span class="info">?</span></button><button type="button" id="clear">' + idioma.clrBttnText + '<span class="info">?</span></button><button type="button" id="save">' + idioma.saveBttnText + '<span class="info">?</span></button><img id="spFlag" class="lngIcon" src="imagenes/iconos/spain_flag-min.png"><img id="ukFlag" class="lngIcon" src="imagenes/iconos/uk_flag-min.png"></section><aside class="dialog" id="dialogOptions"></aside><aside class="dialog" id="dialogConfirm"></aside><aside id="blastChooser" class="blastChooserHidden"></aside><aside class="hiddenHelp" id="dialogHelp"></aside><aside class="hiddenHelp" id="legalWarning"></aside><aside class="dialog" id="dialogBgs"></aside><aside id="noticeDialog"></aside>';
     document.body.appendChild(botonera);
     if (idioma.yesText == "Si") {
         document.getElementById("spFlag").style.outline = "inset 4px rgba(255, 255, 255, 0.8)";
@@ -879,9 +947,10 @@ function btnDisplayer() {
     }
 
 
-    // Evitamos que se abra el menu contextual para obligar la descarga mediante el boton de función al efecto.
+    // Eventos generales para funciones asociadas al ratón
 
-    document.body.oncontextmenu = function() {return false;};
+    document.body.oncontextmenu = function(evento) {estelaOnOff(evento);};
+    document.body.onmousewheel = function(evento) {blastResizer(evento);};
 }
 
 // Función para la selección de idiomas

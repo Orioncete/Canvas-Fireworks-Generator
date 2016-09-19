@@ -240,7 +240,7 @@ button:hover, #dwldBtn, #understood {
     position: absolute;
     width: 100%;
     top: 0;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.8);
     color: black;
     text-align: center;
     text-shadow: -1px 1px 2px white;
@@ -264,7 +264,7 @@ button:hover, #dwldBtn, #understood {
 }
 #customBg {
     width: 50%;
-    font-size: 1em;
+    font-size: 0.9em;
     border: solid 1px white;
     margin-top: 1.2em;
 }
@@ -307,6 +307,27 @@ button:hover, #dwldBtn, #understood {
     border-radius: .3em;
     margin: 0;
     padding: 0;
+}
+#bgClosingIcon {
+    position: absolute;
+    left: 97%;
+    top: .5em;
+}
+#noticeDialog {
+    display: none;
+    position: absolute;
+    top: 2em;
+    left: 86%;
+    width: 14%;
+    padding: 0.4em 0 0.4em .8em;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 1.5em;
+    color: white;
+    border-top: double 4px white;
+    border-left: double 4px white;
+    border-bottom: double 4px white;
+    border-top-left-radius: .5em;
+    border-bottom-left-radius: .5em;
 }
 
 /* Media Queries para tamaños inferiores al recomendado */
