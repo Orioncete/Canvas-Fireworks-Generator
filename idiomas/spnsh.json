@@ -42,5 +42,8 @@
     "dwldText": "Descargar",
     "noIE": "Internet Explorer no soporta esta función.<br>Si desea disfrutar del total de funciones de esta aplicación plantéese instalar un navegador decente como Chrome o Firefox.",
     "bgDwnlHeader": "Elija una imagen para descargar",
-    "dwnlBtn": "Descargar fondos"
+    "dwnlBtn": "Descargar fondos",
+    "trailOnText": "Estela activada",
+    "trailOffText": "Estela desactivada",
+    "sizeText": "Tamaño: "
 }

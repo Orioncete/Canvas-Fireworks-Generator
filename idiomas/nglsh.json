@@ -42,5 +42,8 @@
     "dwldText": "Download",
     "noIE": "Internet Explorer doesn't allow this function, sorry.<br>If you want to fully enjoy this software functionality, please consider installing a decent browser like Chrome or Firefox.",
     "bgDwnlHeader": "Pick a background to download",
-    "dwnlBtn": "Download backgrounds"
+    "dwnlBtn": "Download backgrounds",
+    "trailOnText": "Trails enabled",
+    "trailOffText": "Trails disabled",
+    "sizeText": "Blast size: "
 }
