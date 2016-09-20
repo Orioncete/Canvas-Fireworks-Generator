@@ -87,7 +87,7 @@ var config = {
     fondo: "imagenes/paris-min.jpg",
     vista: "lateral",
     blaster: "manual",
-    set: fwSets[3],
+    set: fwSets[1],
     trail: "on",
     resizer: 1,
     legalconsent: ""
@@ -125,27 +125,16 @@ function langSettings(lang) {
 // FUNCIONES DE DEFINICION DEL COMPORTAMIENTO DE LOS COHETES Y SUS ESTELAS
 //________________________________________________________________________
 
-// Asignación de un coeficiente gráfico según el navegador usado para corregir la deteción del cursor
-
-//if (navigator.userAgent.indexOf("Chrome") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
-    var adjustment = 0.99;
-//}
-//if (navigator.userAgent.indexOf("Firefox") != -1) {
-//    var adjustment = 1;
-//}
-
-// Funciones para definir y usar un cohete de ascenso radial (desde el centro del lienzo)
-
 // Función que define y dibuja la estela
 
 function estelaCentr(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
-    var radio1 = Math.sqrt(Math.pow(Math.abs(((evento.clientX * adjustment)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
-    var degradado1 = contexto.createRadialGradient((lienzo.width / 2), (lienzo.height / 2), 0, (evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop, radio1 * 0.1);
+    var radio1 = Math.sqrt(Math.pow(Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
+    var degradado1 = contexto.createRadialGradient((lienzo.width / 2), (lienzo.height / 2), 0, (evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop, radio1 * 0.1);
     contexto.beginPath();
     contexto.moveTo((lienzo.width / 2), (lienzo.height / 2));
-    contexto.lineTo((evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
+    contexto.lineTo((evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
     contexto.lineWidth = ((radio1 / (lienzo.width / 2)) * 8) * config.resizer;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
@@ -167,19 +156,19 @@ function boomCentr(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     var imagen = new Image();
-    var hptns = Math.sqrt(Math.pow(Math.abs(((evento.clientX * adjustment)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
-    var seno = Math.abs(((evento.clientX * adjustment)  -  lienzo.offsetLeft) - (lienzo.width / 2)) / hptns;
+    var hptns = Math.sqrt(Math.pow(Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)), 2) + Math.pow(Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)), 2));
+    var seno = Math.abs(((evento.clientX * 0.99)  -  lienzo.offsetLeft) - (lienzo.width / 2)) / hptns;
     var coseno = Math.abs((evento.clientY - lienzo.offsetTop) - (lienzo.height / 2)) / hptns;
-    if ((evento.clientX * adjustment) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
         var angulo = Math.asin(seno);
     }
-    if ((evento.clientX * adjustment) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft > lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
         var angulo = -1 * ((Math.asin(seno) * 180 / Math.PI) + 180) * Math.PI / 180;
     }
-    if ((evento.clientX * adjustment) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop > lienzo.height / 2) {
         var angulo = ((Math.asin(seno) * 180 / Math.PI) + 180) * Math.PI / 180;
     }
-    if ((evento.clientX * adjustment) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
+    if ((evento.clientX * 0.99) - lienzo.offsetLeft < lienzo.width / 2 && evento.clientY - lienzo.offsetTop < lienzo.height / 2) {
         var angulo = -1 * Math.asin(seno);
     }
     imagen.src = config.set.blast;
@@ -187,7 +176,7 @@ function boomCentr(evento) {
         var anchoEscala = imagen.width * (Math.abs(hptns) / (lienzo.width / 2)) * config.resizer;
         var altoEscala = imagen.height * (Math.abs(hptns) / (lienzo.width / 2)) * config.resizer;
         contexto.save();
-        contexto.translate(((evento.clientX * adjustment) - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
+        contexto.translate(((evento.clientX * 0.99) - lienzo.offsetLeft), (evento.clientY - lienzo.offsetTop));
         contexto.rotate(angulo);
         contexto.drawImage(imagen, 0 - anchoEscala / 2, 0 - altoEscala / 2, anchoEscala, altoEscala);
         contexto.restore();
@@ -202,10 +191,10 @@ function estelaVert(evento) {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     var altura = evento.clientY - lienzo.offsetTop;
-    var degradado1 = contexto.createLinearGradient((evento.clientX * adjustment), lienzo.height, (evento.clientX * adjustment), evento.clientY);
+    var degradado1 = contexto.createLinearGradient((evento.clientX * 0.99), lienzo.height, (evento.clientX * 0.99), evento.clientY);
     contexto.beginPath();
-    contexto.moveTo((evento.clientX * adjustment) - lienzo.offsetLeft, lienzo.height);
-    contexto.lineTo((evento.clientX * adjustment) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
+    contexto.moveTo((evento.clientX * 0.99) - lienzo.offsetLeft, lienzo.height);
+    contexto.lineTo((evento.clientX * 0.99) - lienzo.offsetLeft, evento.clientY - lienzo.offsetTop);
     contexto.lineWidth = (1 + (altura / lienzo.height) * 5) * config.resizer;
     degradado1.addColorStop(0, "transparent");
     degradado1.addColorStop(0.45, config.set.estela1);
@@ -233,7 +222,7 @@ function boomVert(evento) {
     imagen.onload = function() {
         var anchoEscala = imagen.width * escala;
         var altoEscala = imagen.height * escala;
-        contexto.drawImage(imagen, (((evento.clientX * adjustment) - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
+        contexto.drawImage(imagen, (((evento.clientX * 0.99) - lienzo.offsetLeft) - (anchoEscala / 2)), ((evento.clientY - lienzo.offsetTop) - (altoEscala / 2)), anchoEscala, altoEscala);
     }
 }
 
@@ -254,13 +243,19 @@ function canvasReset() {
 // del lienzo, como en la selección de fondo)
 
 function backgrImgSetter() {
+    var lienzo = document.getElementById("lienzo1");
+    var contexto = lienzo.getContext("2d");
+    contexto.globalCompositeOperation = "destination-over";
+    if (config.fondo.indexOf("firebasestorage") != -1) { // Si la URL del fondo es de Firebase Storage
+        var fondoLienzo = fondoDescargado; // Usaremos la imagen ya almacenada para evitar peticiones
+        fondoLienzo.onload = function() {
+                contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
+        };
+        contexto.globalCompositeOperation = "source-over";
+    }
     if (config.fondo != "") {
-        var lienzo = document.getElementById("lienzo1");
-        var contexto = lienzo.getContext("2d");
-        contexto.globalCompositeOperation = "destination-over";
         var fondoLienzo = new Image();
         fondoLienzo.src = config.fondo;
-        fondoLienzo.crossOrigin = "https://fireworks-generator.firebaseapp.com/";
         fondoLienzo.onload = function() {
             contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
         };
@@ -437,10 +432,10 @@ function backgroundSelector() {
     });
 }
 
-// Funciónes para la presentación y descarga de imágenes de fondo desde Firebase Storage
+// Funciones para la presentación y descarga de imágenes de fondo desde Firebase Storage
 // _____________________________________________________________________________________
 
-// Función que recoge el objeto de los fondos disponibles desde Firebase Database
+// Función que recoge el objeto con la lista de fondos disponibles desde Firebase Database
 
 var bgList = new Array;
 
@@ -449,7 +444,7 @@ function bgDownloader() {
 
     var baseDeDatos = firebase.database(); // Seleccionamos la base de datos de Firebase...
     if(baseDeDatos.ref("bgList").orderByValue()) {
-        baseDeDatos.ref("bgList").on("value", function(snapshot) {
+        baseDeDatos.ref("bgList").once("value", function(snapshot) {
             if (snapshot.val() != null)  {
                 bgList = snapshot.val();
             }
@@ -459,6 +454,8 @@ function bgDownloader() {
 
 // Función para generar la ventana de selección fondos disponibles para descarga.
 // También incluye una ventana de confirmación de cambios y los manejadores de evento necesarios
+
+var fondoDescargado = new Image(); // Creamos una nueva imagen que ahorrará peticiones a Firebase Storage
 
 function customBgWindow() {
     var repetir;
@@ -484,6 +481,7 @@ function customBgWindow() {
                 confirmacion.style.display = "block";
                 document.getElementById("confirm").addEventListener("click", function(){
                     config.fondo = newBg;
+                    fondoDescargado.src = newBg;
                     backgrImgSetter();
                     confirmacion.style.zIndex = 2;
                     confirmacion.style.display = "none";
@@ -510,7 +508,7 @@ function customBgWindow() {
     else {
         setTimeout(function() {
             repetir = customBgWindow();
-        }, 300);
+        }, 500);
     }
 }
 
@@ -537,7 +535,6 @@ function filterSetter() {
         var lienzo = document.getElementById("lienzo1");
         var contexto = lienzo.getContext("2d");
         var lienzoBackup = new Image();
-        lienzoBackup.crossOrigin = "http://localhost/Fireworks/";
         lienzoBackup.src = lienzo.toDataURL("image/jpeg");
         contexto.globalCompositeOperation = filter.effect || filter.effect.replace(/"/g, "");
         contexto.fillStyle = filter.color;
@@ -889,6 +886,7 @@ function blastResizer(evento) {
     noticeDialog(idioma.sizeText + Math.round(config.resizer * 100) + "%");
 }
 
+
 // FUNCIONES PARA CREACION E INTERACTIVIDAD DEL ENTORNO GRAFICO DEL DOCUMENTO
 //___________________________________________________________________________
 
@@ -947,10 +945,10 @@ function btnDisplayer() {
     }
 
 
-    // Eventos generales para funciones asociadas al ratón
+    // Manejadores de evento generales para funciones asociadas al ratón
 
-    document.body.oncontextmenu = function(evento) {estelaOnOff(evento);};
-    document.body.onmousewheel = function(evento) {blastResizer(evento);};
+    document.getElementById("lienzo1").oncontextmenu = function(evento) {estelaOnOff(evento);};
+    document.getElementById("lienzo1").onmousewheel = function(evento) {blastResizer(evento);};
 }
 
 // Función para la selección de idiomas

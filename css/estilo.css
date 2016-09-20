@@ -342,6 +342,9 @@ button:hover, #dwldBtn, #understood {
     #blastChooser button {
         margin: 0 .8em .5em 0;
     }
+    #bgClosingIcon {
+        left: 96%;
+    }
 }
 
 @media screen and (max-width: 1400px) {
@@ -359,6 +362,9 @@ button:hover, #dwldBtn, #understood {
     }
     input[type=text] {
         width: 40%;
+    }
+    #bgClosingIcon {
+        left: 95.2%;
     }
 }
 
@@ -391,6 +397,9 @@ button:hover, #dwldBtn, #understood {
     }
     #dialogOptions {
         margin-top: -5em;
+    }
+    #bgClosingIcon {
+        width: 2.5em;
     }
 }
 
