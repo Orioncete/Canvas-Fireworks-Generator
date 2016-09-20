@@ -1,7 +1,8 @@
 [
   {
-    "origin": ["https://fireworks-generator.firebaseapp.com"],
-    "method": ["GET"],
+    "origin": ["*"],
+    "method": ["*"],
+    "responseHeader": ["Content-Type", "Cache-Control", "Content-Language", "Expires", "Last-Modified", "Pragma"],
     "maxAgeSeconds": 3600
   }
 ]

@@ -246,21 +246,13 @@ function backgrImgSetter() {
     var lienzo = document.getElementById("lienzo1");
     var contexto = lienzo.getContext("2d");
     contexto.globalCompositeOperation = "destination-over";
-    if (config.fondo.indexOf("firebasestorage") != -1) { // Si la URL del fondo es de Firebase Storage
-        var fondoLienzo = fondoDescargado; // Usaremos la imagen ya almacenada para evitar peticiones
-        fondoLienzo.onload = function() {
-                contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
-        };
-        contexto.globalCompositeOperation = "source-over";
-    }
-    if (config.fondo != "") {
-        var fondoLienzo = new Image();
-        fondoLienzo.src = config.fondo;
-        fondoLienzo.onload = function() {
-            contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
-        };
-        contexto.globalCompositeOperation = "source-over";
-    }
+    var fondoLienzo = new Image();
+    fondoLienzo.crossOrigin = "";
+    fondoLienzo.src = config.fondo;
+    fondoLienzo.onload = function() {
+        contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
+    };
+    contexto.globalCompositeOperation = "source-over";
 }
 
 // Función para el pintado de un color de fondo (empleada tanto durante el reinicio
@@ -307,20 +299,19 @@ function saveCanvas() {
             lienzoFoto.height = lienzo.height / saveSize;
             contextoFoto.drawImage(lienzo, 0, 0, lienzoFoto.width, lienzoFoto.height);
             contextoFoto.globalCompositeOperation = "luminosity";
-            if (saveSize < 2) {
-                contextoFoto.font = "16px Comic Sans MS";
-                var centrado = 1.1;
+            if (lienzoFoto.width >= 750) {
+                var fontEms = Math.round(lienzoFoto.width / 80);
             }
             else {
-                contextoFoto.font = "12px Comic Sans MS";
-                var centrado = .8;
+                var fontEms = Math.round(lienzoFoto.width / 36);
             }
+            contextoFoto.font = fontEms + "px Comic Sans MS"
             contextoFoto.shadowColor = "#000000";
             contextoFoto.shadowOffsetX = -3;
             contextoFoto.shadowOffsetY = 3;
             contextoFoto.shadowBlur = 2;
             contextoFoto.fillStyle = "#ffffff";
-            contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - ((lienzo.width / 4) * centrado), lienzoFoto.height - (16 - (saveSize * 2)));
+            contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - (31 * fontEms), lienzoFoto.height - (16 - (saveSize * 2)));
             contextoFoto.globalCompositeOperation = "source-over";
             var imgToSave = new Image();
             imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
@@ -444,7 +435,7 @@ function bgDownloader() {
 
     var baseDeDatos = firebase.database(); // Seleccionamos la base de datos de Firebase...
     if(baseDeDatos.ref("bgList").orderByValue()) {
-        baseDeDatos.ref("bgList").once("value", function(snapshot) {
+        baseDeDatos.ref("bgList").on("value", function(snapshot) {
             if (snapshot.val() != null)  {
                 bgList = snapshot.val();
             }
@@ -454,8 +445,6 @@ function bgDownloader() {
 
 // Función para generar la ventana de selección fondos disponibles para descarga.
 // También incluye una ventana de confirmación de cambios y los manejadores de evento necesarios
-
-var fondoDescargado = new Image(); // Creamos una nueva imagen que ahorrará peticiones a Firebase Storage
 
 function customBgWindow() {
     var repetir;
@@ -481,7 +470,6 @@ function customBgWindow() {
                 confirmacion.style.display = "block";
                 document.getElementById("confirm").addEventListener("click", function(){
                     config.fondo = newBg;
-                    fondoDescargado.src = newBg;
                     backgrImgSetter();
                     confirmacion.style.zIndex = 2;
                     confirmacion.style.display = "none";
