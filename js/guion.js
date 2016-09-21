@@ -125,6 +125,8 @@ function langSettings(lang) {
 // FUNCIONES DE DEFINICION DEL COMPORTAMIENTO DE LOS COHETES Y SUS ESTELAS
 //________________________________________________________________________
 
+// Funciones para definir y usar un cohete de ascenso central (desde el centro de la imagen de fondo)
+
 // Función que define y dibuja la estela
 
 function estelaCentr(evento) {
@@ -247,7 +249,7 @@ function backgrImgSetter() {
     var contexto = lienzo.getContext("2d");
     contexto.globalCompositeOperation = "destination-over";
     var fondoLienzo = new Image();
-    fondoLienzo.crossOrigin = "";
+    fondoLienzo.crossOrigin = ""; // Definimos el origen de la imagen como anónimo para evitar problemas con las políticas de seguridad Same Origin relativos a Tainted Canvas.
     fondoLienzo.src = config.fondo;
     fondoLienzo.onload = function() {
         contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
@@ -712,7 +714,7 @@ function toca(sonido) {
 
 // Función para la ejecución del proposito principal (disparar los fuegos correctamente)
 // Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
-// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 732)
+// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 721)
 
 function blastRenderer(evento) {
     if (config.blaster == "random") {
