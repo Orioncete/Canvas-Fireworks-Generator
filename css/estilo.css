@@ -64,6 +64,9 @@ button:hover, #dwldBtn, #understood {
 #dialogOptions {
 	font-size: 1.5em;
 }
+#dialogOptions hr {
+    max-width: 94%;
+}
 #dialogHelp {
     background-color: rgba(0, 0, 0, 0.6);
     color: white;

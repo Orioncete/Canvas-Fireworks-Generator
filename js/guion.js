@@ -374,7 +374,7 @@ function saveCanvas() {
 function backgroundSelector() {
     var ventana = document.getElementById("dialogOptions");
     var confirmacion = document.getElementById("dialogConfirm");
-    var mainWindCont = '<label for="colorin">' + idioma.bgColLabel + '</label><input id="colorin" name="colorin" type="color"><br><br><label for="fotico">' + idioma.bgImgLabel + '</label><input id="fotico" name="fotico" type="file" accept="image/*"><br><button type="button" id="customBg">' + idioma.dwnlBtn + '</button><br><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
+    var mainWindCont = '<label for="colorin">' + idioma.bgColLabel + '</label><input id="colorin" name="colorin" type="color"><br><hr><label for="fotico">' + idioma.bgImgLabel + '</label><input id="fotico" name="fotico" type="file" accept="image/*"><br><button type="button" id="customBg">' + idioma.dwnlBtn + '</button><br><img src="imagenes/iconos/white_closer-min.png" id="closeIcon">';
     ventana.innerHTML = mainWindCont;
     ventana.style.top = "40%"
     ventana.style.display = "block";
@@ -450,6 +450,8 @@ function bgDownloader() {
 
 function customBgWindow() {
     var repetir;
+    var otherWindow = document.getElementById("dialogOptions");
+    otherWindow.style.zIndex = "-10";
     if (bgList && bgList != undefined && bgList.length != 0) {
         var ventana = document.getElementById("dialogBgs");
         var confirmacion = document.getElementById("dialogConfirm");
@@ -474,11 +476,15 @@ function customBgWindow() {
                     config.fondo = newBg;
                     backgrImgSetter();
                     confirmacion.style.zIndex = 2;
+                    otherWindow.style.zIndex = 1;
+                    otherWindow.style.display = "none";
                     confirmacion.style.display = "none";
                     ventana.style.display = "none";
                 });
                 document.getElementById("deny").addEventListener("click", function(){
                     confirmacion.style.zIndex = 2;
+                    otherWindow.style.zIndex = 1;
+                    otherWindow.style.display = "none";
                     confirmacion.style.display = "none";
                     ventana.style.display = "none";
                 });
@@ -492,6 +498,8 @@ function customBgWindow() {
         }
         document.getElementById("bgClosingIcon").addEventListener("click", function() {
             ventana.style.display = "none";
+            otherWindow.style.zIndex = 1;
+            otherWindow.style.display = "none";
         })
     clearTimeout(repetir);
     }
@@ -521,6 +529,8 @@ function transparencyAdder(valor, transp) {
 // y permite un retorno al estado previo tras aplicar los cambiossi el usuario los rechaza.
 
 function filterSetter() {
+    var otherWindow = document.getElementById("dialogOptions");
+    otherWindow.style.zIndex = -10;
     if (filter.color != "" && filter.effect != "") {
         var lienzo = document.getElementById("lienzo1");
         var contexto = lienzo.getContext("2d");
@@ -533,14 +543,19 @@ function filterSetter() {
         var ventana = document.getElementById("dialogConfirm");
         var mainWindCont = '<h4>' + idioma.fltWarn1 + '</h4><p>' + idioma.fltWarn2 + '</p><br><button type="button" id="confirm" class="choiceBtn">' + idioma.yesText + '</button><button type="button" id="deny" class="choiceBtn">' + idioma.noText + '</button>';
         ventana.innerHTML = mainWindCont;
+        ventana.style.fontSize = "1.2em";
         ventana.style.top = "40%";
         ventana.style.display = "block";
         document.getElementById("confirm").addEventListener("click", function() {
             ventana.style.display = "none";
+            otherWindow.style.display = "none";
+            otherWindow.style.zIndex = 1;
         });
         document.getElementById("deny").addEventListener("click", function() {
             contexto.drawImage(lienzoBackup, 0, 0, lienzo.width, lienzo.height);
             ventana.style.display = "none";
+            otherWindow.style.display = "none";
+            otherWindow.style.zIndex = 1;
         });
     }
     else {
@@ -575,6 +590,7 @@ function filterChoose() {
         var mainWindCont = '<h3>' + idioma.fltInf1 + '</h3><section id="listaFiltros"><input type="radio" name="filtro" id="negativo" value="negativo"><label for="negativo">' + idioma.fltNeg + '</label><hr><input type="radio" name="filtro" id="b&w" value="b&w"><label for="b&w">' + idioma.fltBaW + '</label><hr><input type="radio" name="filtro" id="taint" value="taint"><label for="taint">' + idioma.fltTaint + '</label><span><label for="taintCol">' + idioma.colorText + '</label><input type="color" id="taintCol"></span><hr><input type="radio" name="filtro" id="mart" value="mart"><label for="mart">' + idioma.fltMars + '</label><span><label for="martCol">' + idioma.colorText + '</label><input type="color" id="martCol"></span><hr><input type="radio" name="filtro" id="nighty" value="nighty"><label for="nighty">' + idioma.fltNight + '</label><hr><input type="radio" name="filtro" id="dayly" value="dayly"><label for="dayly">' + idioma.fltDay + '</label><span><label for="dayCol">' + idioma.colorText + '</label><input type="color" id="dayCol"></span></section><br><button type="button" id="filtroOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closingIcon">';
         ventana.innerHTML = mainWindCont;
         ventana.style.top = "30%";
+        ventana.style.fontSize = "1.5em";
         ventana.style.display = "block";
         document.getElementById("closingIcon").addEventListener("click", function() {
             ventana.style.display = "none";
@@ -833,13 +849,11 @@ function hideHelp() {
 // Función para la creación de la ventana de avisos de eventos del mouse
 
 function noticeDialog(content) {
-    var aviso = document.getElementById("noticeDialog");
-    aviso.style.display = "none";
-    var avisoOff;
     clearTimeout(avisoOff);
+    var aviso = document.getElementById("noticeDialog");
     aviso.innerHTML = content;
     aviso.style.display = "block";
-    avisoOff = setTimeout(function() {
+    var avisoOff = setTimeout(function() {
         aviso.style.display = "none";
     }, 1000);;
 }
