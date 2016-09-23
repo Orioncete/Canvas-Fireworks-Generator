@@ -100,7 +100,6 @@ var filter = {
 
 // Asignación y carga de paquetes de idioma
 
-
 function langSettings(lang) {
     var userLang = navigator.language || navigator.userLanguage; // Recogemos el lenguaje por defecto del navegador
     if (((userLang.indexOf("es") != -1 || userLang == undefined) && !lang) || lang == "spnsh") {
@@ -121,6 +120,44 @@ function langSettings(lang) {
     peticion.send(); // Enviamos la petición
 }
 
+// Creación del objeto que usaremos para la creación de metadatos
+
+function createMeta() {
+    metadata = {
+        startDate: new Date(),
+        displaySize: screen.width + " X " + screen.height,
+        os: "Desconocido",
+        browser: "Desconocido",
+        usedFilters: [],
+        randomUsed: "No",
+        trailsDisabled: "No",
+        language: idioma.definition
+    };
+    var datosUsuario = navigator.userAgent;
+
+    // Calculamos el SO
+
+    if (datosUsuario.indexOf("Android") != -1) { metadata.os = "Android (dsktp)"};
+    if (datosUsuario.indexOf("Android") != -1 && datosUsuario.indexOf("Mobile")) { metadata.os = "Android (mobile)"};
+    if (datosUsuario.indexOf("Windows NT 10.0") != -1) { metadata.os = "Windows 10"};
+    if (datosUsuario.indexOf("Windows NT 6.3") != -1) { metadata.os = "Windows 8.1"};
+    if (datosUsuario.indexOf("Windows NT 6.2") != -1) { metadata.os = "Windows 8"};
+    if (datosUsuario.indexOf("Windows NT 6.1") != -1) { metadata.os = "Windows 7"};
+    if (datosUsuario.indexOf("Windows NT 6.0") != -1) { metadata.os = "Windows Vista"};
+    if (datosUsuario.indexOf("Windows NT 5.1") != -1) { metadata.os = "Windows XP"};
+    if (datosUsuario.indexOf("Windows NT 5.0") != -1) { metadata.os = "Windows 2000"};
+    if (datosUsuario.indexOf("Mac")!=-1) { metadata.os = "Mac/iOS"};
+    if (datosUsuario.indexOf("X11")!=-1) { metadata.os = "UNIX"};
+    if (datosUsuario.indexOf("Linux")!=-1) { metadata.os = "Linux"};
+
+    // Calculamos el navegador
+
+    if (datosUsuario.indexOf("Chrome") != -1) { metadata.browser = "Chrome"};
+    if (datosUsuario.indexOf("Firefox") != -1) { metadata.browser = "Firefox"};
+    if (datosUsuario.indexOf("Opera") != -1 || datosUsuario.indexOf("OPR") != -1) { metadata.browser = "Opera"};
+    if (datosUsuario.indexOf("Trident") != -1) { metadata.browser = "IE"};
+    if (datosUsuario.indexOf("Edge") != -1) { metadata.browser = "Edge"};
+}
 
 // FUNCIONES DE DEFINICION DEL COMPORTAMIENTO DE LOS COHETES Y SUS ESTELAS
 //________________________________________________________________________
@@ -255,6 +292,7 @@ function backgrImgSetter() {
         contexto.drawImage(fondoLienzo, 0, 0, Math.abs(lienzo.width), Math.abs(lienzo.height));
     };
     contexto.globalCompositeOperation = "source-over";
+    createMeta();
 }
 
 // Función para el pintado de un color de fondo (empleada tanto durante el reinicio
@@ -266,6 +304,33 @@ function backgrColSetter() {
     contexto.fillStyle = config.color;
     contexto.fillRect(0, 0, lienzo.width, lienzo.height);
     contexto.globalCompositeOperation = "source-over";
+    createMeta();
+}
+
+// Función para generar el archivo de metadatos que añadiremos al contenido generado alojado en Firebase
+
+function firebaseMetadata() {
+    var currentTime = new Date();
+    var usedTime = new Date(currentTime - metadata.startDate).getMinutes() + " minutos";
+    var filtrosUsados = "";
+    for (i = 0; i < metadata.usedFilters.length; i++) {
+        filtrosUsados += "Filtro " + (i + 1) + ": " + metadata.usedFilters[i].filter + " - " + "Color: " + metadata.usedFilters[i].color + " / ";
+    }
+    var metadataFirebase = {
+        contentType: "image/jpeg",
+        customMetadata: {
+            "Fecha de creación": currentTime.toDateString(),
+            "Tiempo Empleado": usedTime.toString(),
+            "Resolucion de Pantalla": (metadata.displaySize + " pixels").toString(),
+            "SO": metadata.os.toString(),
+            "Navegador": metadata.browser.toString(),
+            "Filtros Usados": filtrosUsados.toString(),
+            "Usó Aleatorizador": metadata.randomUsed.toString(),
+            "Desactivó Estelas": metadata.trailsDisabled.toString(),
+            "Lenguaje": metadata.language.toString()
+        }
+    };
+    return metadataFirebase;
 }
 
 // Función para la descarga y guardado de la imagen creada en un archivo .jpg
@@ -282,68 +347,82 @@ function saveCanvas() {
         var lienzoFoto = document.createElement("canvas");
         var contextoFoto = lienzoFoto.getContext("2d");
         var ventana = document.getElementById("dialogOptions");
-        var mainWindCont = '<label for="nombreArchivo">' + idioma.saveLabel1 + '</label><input type="text" id="nombreArchivo" placeholder="firework"><br><br><label for="dimensiones">' + idioma.saveLabel2 + '</label><select id="dimensiones"><option class="tamanos" value="1">' + parseInt(lienzo.width) + " X " + parseInt(lienzo.height) + '</option><option class="tamanos" value="2" selected>' + parseInt(lienzo.width / 2) + " X " + parseInt(lienzo.height / 2) + '</option><option class="tamanos" value="3">' + parseInt(lienzo.width / 3) + " X " + parseInt(lienzo.height / 3) + '</option><option class="tamanos" value="4">' + parseInt(lienzo.width / 4) + " X " + parseInt(lienzo.height / 4) + '</option></select><br><br><button type="button" id="saveOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closeSaver">';
+        var mainWindCont = '<label for="nombreArchivo">' + idioma.saveLabel1 + '</label><input type="text" id="nombreArchivo" placeholder="' + idioma.filePlaceholder + '"><br><br><label for="dimensiones">' + idioma.saveLabel2 + '</label><select id="dimensiones"><option class="tamanos" value="1">' + parseInt(lienzo.width) + " X " + parseInt(lienzo.height) + '</option><option class="tamanos" value="2" selected>' + parseInt(lienzo.width / 2) + " X " + parseInt(lienzo.height / 2) + '</option><option class="tamanos" value="3">' + parseInt(lienzo.width / 3) + " X " + parseInt(lienzo.height / 3) + '</option><option class="tamanos" value="4">' + parseInt(lienzo.width / 4) + " X " + parseInt(lienzo.height / 4) + '</option></select><br><br><button type="button" id="saveOk">' + idioma.okText + '</button><img src="imagenes/iconos/white_closer-min.png" id="closeSaver">';
         ventana.innerHTML = mainWindCont;
         ventana.style.top = "40%"
         ventana.style.display = "block";
+        document.getElementById("nombreArchivo").addEventListener("focus", function() {
+            this.placeholder = "";
+            this.style.backgroundColor = "white";
+        });
         document.getElementById("closeSaver").addEventListener("click", function(){
             ventana.style.display = "none";
         });
         document.getElementById("saveOk").addEventListener("click", function() {
-            var tama = document.getElementsByClassName("tamanos");
-            for (i = 0; i < tama.length; i++) {
-                if (tama[i].selected == true) {
-                    var saveSize = tama[i].value;
-                }
-            }
-            var fileName = document.getElementById("nombreArchivo").value;
-            lienzoFoto.width = lienzo.width / saveSize;
-            lienzoFoto.height = lienzo.height / saveSize;
-            contextoFoto.drawImage(lienzo, 0, 0, lienzoFoto.width, lienzoFoto.height);
-            contextoFoto.globalCompositeOperation = "luminosity";
-            if (lienzoFoto.width >= 750) {
-                var fontEms = Math.round(lienzoFoto.width / 80);
+            var fileName = document.getElementById("nombreArchivo").value.trim();
+            if (!fileName || fileName == "") {
+                document.getElementById("nombreArchivo").setAttribute("placeholder", idioma.filePlaceholder.toUpperCase());
+                document.getElementById("nombreArchivo").style.backgroundColor = "red";
+                return;
             }
             else {
-                var fontEms = Math.round(lienzoFoto.width / 36);
-            }
-            contextoFoto.font = fontEms + "px Comic Sans MS"
-            contextoFoto.shadowColor = "#000000";
-            contextoFoto.shadowOffsetX = -3;
-            contextoFoto.shadowOffsetY = 3;
-            contextoFoto.shadowBlur = 2;
-            contextoFoto.fillStyle = "#ffffff";
-            contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - (31 * fontEms), lienzoFoto.height - (16 - (saveSize * 2)));
-            contextoFoto.globalCompositeOperation = "source-over";
-            var imgToSave = new Image();
-            imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
-            var descarga = document.createElement("a");
-            descarga.href = imgToSave.src;
-            descarga.type = "image/jpeg";
-            descarga.download = fileName || "Fireworks-Generator © 2016 Pedro Pablo Gonzalo";
-            descarga.target = "_blank";
-            if (config.legalconsent == "true") { // Si el usuario ha dado consentimiento para compartir el contenido...
-                lienzoFoto.toBlob(function(blob){ // Generamos un 'blob' para enviarlo a Firebase como contenido
-                    var archivo = new Image();
-                    archivo.src = blob;
-                    archivo.type = "image/jpeg";
-                    var storageRef = firebase.storage().ref("User_pictures/" + (fileName || "Fireworks-Generator © 2016 Pedro Pablo Gonzalo") + ".jpg"); // Asocimos la referencia del storage de Firebase
-                    storageRef.put(blob); // Con 'put()' enviamos el archivo al storage de Firebase
-                });
-            }
-            if (navigator.userAgent.indexOf("Chrome") != -1) {
-                descarga.click();
-                ventana.style.display = "none";
-            }
-            else { // Work-around para Firefox
-                descarga.innerHTML = idioma.dwldText;
-                descarga.setAttribute("id", "dwldBtn");
-                descarga.download += ".jpg";
-                document.getElementById("saveOk").parentNode.appendChild(descarga);
-                document.getElementById("saveOk").parentNode.removeChild(document.getElementById("saveOk"));
-                descarga.onclick = function() {
+                var tama = document.getElementsByClassName("tamanos");
+                for (i = 0; i < tama.length; i++) {
+                    if (tama[i].selected == true) {
+                        var saveSize = tama[i].value;
+                    }
+                }
+                lienzoFoto.width = lienzo.width / saveSize;
+                lienzoFoto.height = lienzo.height / saveSize;
+                contextoFoto.drawImage(lienzo, 0, 0, lienzoFoto.width, lienzoFoto.height);
+                contextoFoto.globalCompositeOperation = "luminosity";
+                if (lienzoFoto.width >= 750) {
+                    var fontEms = Math.round(lienzoFoto.width / 80);
+                }
+                else {
+                    var fontEms = Math.round(lienzoFoto.width / 36);
+                }
+                contextoFoto.font = fontEms + "px Comic Sans MS"
+                contextoFoto.shadowColor = "#000000";
+                contextoFoto.shadowOffsetX = -3;
+                contextoFoto.shadowOffsetY = 3;
+                contextoFoto.shadowBlur = 2;
+                contextoFoto.fillStyle = "#ffffff";
+                contextoFoto.fillText(idioma.waterMark, lienzoFoto.width - (31 * fontEms), lienzoFoto.height - (16 - (saveSize * 2)));
+                contextoFoto.globalCompositeOperation = "source-over";
+                var imgToSave = new Image();
+                imgToSave.src = lienzoFoto.toDataURL("image/jpeg");
+                var descarga = document.createElement("a");
+                descarga.href = imgToSave.src;
+                descarga.type = "image/jpeg";
+                descarga.download = fileName + " - " + idioma.waterMark;
+                descarga.target = "_blank";
+                if (config.legalconsent == "true") { // Si el usuario ha dado consentimiento para compartir el contenido...
+                    lienzoFoto.toBlob(function(blob){ // Generamos un 'blob' para enviarlo a Firebase como contenido
+                        var archivo = new Image();
+                        archivo.src = blob;
+                        archivo.type = "image/jpeg";
+                        var storageRef = firebase.storage().ref("User_pictures/" + descarga.download + ".jpg"); // Asocimos la referencia del storage de Firebase
+                        storageRef.put(blob).then(function() { // Con 'put()' enviamos el archivo 'blob' al storage de Firebase y cuando termine...
+                            var newMetadata = firebaseMetadata(); // ...creamos archivo de metadatos para Firebase...
+                            firebase.storage().ref("User_pictures/" + descarga.download + ".jpg").updateMetadata(newMetadata); // ...y lo añadimos al fichero en Firebase Storage
+                        });
+                    });
+                }
+                if (navigator.userAgent.indexOf("Chrome") != -1) {
+                    descarga.click();
                     ventana.style.display = "none";
-                };
+                }
+                else { // Work-around para Firefox
+                    descarga.innerHTML = idioma.dwldText;
+                    descarga.setAttribute("id", "dwldBtn");
+                    descarga.download += ".jpg";
+                    document.getElementById("saveOk").parentNode.appendChild(descarga);
+                    document.getElementById("saveOk").parentNode.removeChild(document.getElementById("saveOk"));
+                    descarga.onclick = function() {
+                        ventana.style.display = "none";
+                    };
+                }
             }
         });
     }
@@ -550,6 +629,10 @@ function filterSetter() {
             ventana.style.display = "none";
             otherWindow.style.display = "none";
             otherWindow.style.zIndex = 1;
+            metadata.usedFilters.push({
+                filter: filter.effect,
+                color: filter.color
+            });
         });
         document.getElementById("deny").addEventListener("click", function() {
             contexto.drawImage(lienzoBackup, 0, 0, lienzo.width, lienzo.height);
@@ -695,6 +778,7 @@ function blastSetter() {
         });
         document.getElementById("randomize").addEventListener("click", function() {
             config.blaster = "random";
+            metadata.randomUsed = "Si";
             ventana.classList.remove("blastChooserShown");
             ventana.classList.add("blastChooserHidden");
             desvanecer;
@@ -864,6 +948,7 @@ function estelaOnOff(evento) {
     evento.preventDefault();
     if (config.trail == "on") {
         config.trail = "off";
+        metadata.trailsDisabled = "Si";
         noticeDialog(idioma.trailOffText);
         return false;
     }
@@ -961,11 +1046,13 @@ function langSetter(boton) {
     var btnId = boton.getAttribute("id");
     if (btnId == "spFlag") {
         langSettings("spnsh");
+        metadata.language = idioma.definition;
         btnDisplayer();
         return;
     }
     if (btnId == "ukFlag") {
         langSettings("nglsh");
+        metadata.language = idioma.definition;
         btnDisplayer();
         return;
     }
@@ -1020,6 +1107,7 @@ function legalConsent() {
 
 function contentSetter() {
     langSettings();
+    createMeta();
     if (!!window.WebGLRenderingContext) {
         if (window.innerWidth < window.innerHeight) {
             var displayAlarm = '<aside id="displayAlarm"><h2>' + idioma.contWarn1 + '</h2><button type="button" id="resetter">' + idioma.confirmText + '</button></aside>';
