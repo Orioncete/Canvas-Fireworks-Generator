@@ -119,6 +119,9 @@ button:hover, #dwldBtn, #understood {
     left: 92%;
     top: .5em;
 }
+#nombreArchivo {
+    text-align: right;
+}
 #closeSaver {
     position: absolute;
     left: 92%;
