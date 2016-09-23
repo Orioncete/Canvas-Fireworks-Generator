@@ -1,4 +1,5 @@
 {
+    "definition": "Español",
     "saveLabel1": "Nombre del archivo: ",
     "saveLabel2": "Tamaño de la imagen: ",
     "okText": "Ok",
@@ -45,5 +46,6 @@
     "dwnlBtn": "Descargar fondos",
     "trailOnText": "Estela activada",
     "trailOffText": "Estela desactivada",
-    "sizeText": "Tamaño: "
+    "sizeText": "Tamaño: ",
+    "filePlaceholder": "Nombre de archivo"
 }

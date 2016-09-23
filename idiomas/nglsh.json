@@ -1,4 +1,5 @@
 {
+    "definition": "English",
     "saveLabel1": "File name: ",
     "saveLabel2": "Picture size: ",
     "okText": "Ok",
@@ -45,5 +46,6 @@
     "dwnlBtn": "Download backgrounds",
     "trailOnText": "Trails enabled",
     "trailOffText": "Trails disabled",
-    "sizeText": "Blast size: "
+    "sizeText": "Blast size: ",
+    "filePlaceholder": "Input file name"
 }
