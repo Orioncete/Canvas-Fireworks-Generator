@@ -642,6 +642,8 @@ function filterSetter() {
         });
     }
     else {
+        otherWindow.style.display = "none";
+        otherWindow.style.zIndex = 1;
         return;
     }
 }
@@ -814,7 +816,7 @@ function toca(sonido) {
 
 // Función para la ejecución del proposito principal (disparar los fuegos correctamente)
 // Realiza comprobaciones del objeto Json de configuración y realiza llamadas a distintas
-// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 721)
+// funciones según dichos parámetros, también incluye el aleatorizador de cohetes (linea 823)
 
 function blastRenderer(evento) {
     if (config.blaster == "random") {
