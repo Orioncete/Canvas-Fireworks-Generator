@@ -947,7 +947,9 @@ function noticeDialog(content) {
 // Función para desactivar las estelas de los cohetes con el click derecho del ratón
 
 function estelaOnOff(evento) {
-    evento.preventDefault();
+    if (evento) {
+        evento.preventDefault();
+    }
     if (config.trail == "on") {
         config.trail = "off";
         metadata.trailsDisabled = "Si";
@@ -1040,6 +1042,43 @@ function btnDisplayer() {
 
     document.getElementById("lienzo1").oncontextmenu = function(evento) {estelaOnOff(evento);};
     document.getElementById("lienzo1").onmousewheel = function(evento) {blastResizer(evento);};
+
+    // Manejadores de evento para dispositivos mobile y funciones asociadas
+
+    document.body.addEventListener('touchstart', function(primerToque){
+        primerToque.stopPropagation();
+        var toque1st = primerToque.changedTouches[0];
+        startTime = new Date();
+        inicio = parseInt(toque1st.clientY);
+        document.body.addEventListener('touchend', function(segundoToque){
+            segundoToque.stopImmediatePropagation();
+            var toqueLast = segundoToque.changedTouches[0];
+            var endTime = new Date();
+            var dist = parseInt(toqueLast.clientY) - inicio;
+            var duracion = new Date(endTime - startTime).getMilliseconds();
+            if (duracion > 500) {
+                startTime = 0;
+                endTime = 0;
+                duracion = 0;
+                estelaOnOff();
+            }
+            if (Math.abs(dist) > window.innerHeight / 6) {
+                if (dist < 0) {
+                    config.resizer += 0.05;
+                    if (config.resizer >= 1) {
+                        config.resizer = 1;
+                    }
+                }
+                if (dist > 0) {
+                    config.resizer -= 0.05;
+                    if (config.resizer <= 0.5) {
+                        config.resizer = 0.5;
+                    }
+                }
+                noticeDialog(idioma.sizeText + Math.round(config.resizer * 100) + "%");
+            }
+        });
+    });
 }
 
 // Función para la selección de idiomas
