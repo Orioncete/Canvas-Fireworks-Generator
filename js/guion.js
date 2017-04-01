@@ -112,9 +112,9 @@ function langSettings(lang) {
     var archivo = lenguaje;
 
     peticion.onreadystatechange = function() { // Comprobamos que la petición esté lista...
-    if (this.readyState == 4 && this.status == 200) { // Y que no haya errores en su estado...
-        idioma = JSON.parse(this.responseText); // asignamos la respuesta a una variable global tras darle formato de objeto Json
-        }
+        if (this.readyState == 4 && this.status == 200) { // Y que no haya errores en su estado...
+            idioma = JSON.parse(this.responseText); // asignamos la respuesta a una variable global tras darle formato de objeto Json
+            }
     };
     peticion.open("GET", archivo, false); // Abrimos la petición y empleamos 'false' para realizar una carga síncrona
     peticion.send(); // Enviamos la petición
@@ -138,7 +138,7 @@ function createMeta() {
     // Calculamos el SO
 
     if (datosUsuario.indexOf("Android") != -1) { metadata.os = "Android (dsktp)"};
-    if (datosUsuario.indexOf("Android") != -1 && datosUsuario.indexOf("Mobile")) { metadata.os = "Android (mobile)"};
+    if (datosUsuario.indexOf("Android") != -1 && datosUsuario.indexOf("Mobile") != -1) { metadata.os = "Android (mobile)"};
     if (datosUsuario.indexOf("Windows NT 10.0") != -1) { metadata.os = "Windows 10"};
     if (datosUsuario.indexOf("Windows NT 6.3") != -1) { metadata.os = "Windows 8.1"};
     if (datosUsuario.indexOf("Windows NT 6.2") != -1) { metadata.os = "Windows 8"};
@@ -605,7 +605,7 @@ function transparencyAdder(valor, transp) {
 }
 
 // Función para la aplicación de filtros, genera una ventana de confirmación de datos
-// y permite un retorno al estado previo tras aplicar los cambiossi el usuario los rechaza.
+// y permite un retorno al estado previo tras aplicar los cambios si el usuario los rechaza.
 
 function filterSetter() {
     var otherWindow = document.getElementById("dialogOptions");
